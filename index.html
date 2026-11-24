@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ECHO</title>
+<title>ECHO · 回响</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     width: 100%; height: 100%; overflow: hidden;
     background: #1a120e;
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "Inter", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
     user-select: none; -webkit-user-select: none;
     touch-action: none;
   }
@@ -27,7 +27,7 @@
   }
   #loading-overlay.fade-out { opacity: 0; pointer-events: none; }
   #load-title {
-    font-family: "Cinzel", "Optima", "Georgia", serif;
+    font-family: "Cinzel", "Noto Serif SC", "Songti SC", "PingFang SC", "STSong", serif;
     font-weight: 300; font-size: clamp(28px, 5vw, 44px);
     letter-spacing: 0.62em; text-indent: 0.62em;
     color: rgba(246, 234, 212, 0.92);
@@ -57,12 +57,22 @@
     transition: opacity 0.45s ease, visibility 0.45s ease;
   }
   #title-overlay.visible { opacity: 1; visibility: visible; pointer-events: auto; }
+  .title-head {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
   .title-mark {
-    font-family: "Cinzel", "Optima", "Georgia", serif;
+    font-family: "Cinzel", "Noto Serif SC", "Songti SC", "PingFang SC", "STSong", serif;
     font-weight: 300; font-size: clamp(38px, 7.5vw, 76px);
     letter-spacing: 0.68em; text-indent: 0.68em;
     color: rgba(252, 245, 232, 0.94);
     text-shadow: 0 6px 32px rgba(34, 18, 8, 0.45);
+  }
+  .title-sub {
+    font-family: "Noto Serif SC", "Songti SC", "PingFang SC", "STSong", serif;
+    font-weight: 300; font-size: clamp(12px, 1.8vw, 16px);
+    letter-spacing: 0.95em; text-indent: 0.95em;
+    color: rgba(250, 238, 218, 0.72);
+    text-shadow: 0 2px 16px rgba(24, 14, 8, 0.52);
   }
   .title-actions {
     display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
@@ -71,13 +81,13 @@
   .ghost-btn {
     appearance: none; background: none; border: none; outline: none;
     cursor: pointer; padding: 8px 4px;
-    font-family: "Inter", system-ui, sans-serif;
-    font-weight: 300; font-size: 12px;
-    letter-spacing: 0.34em; text-indent: 0.34em;
-    color: rgba(252, 244, 230, 0.82);
+    font-family: "Inter", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    font-weight: 300; font-size: 13px;
+    letter-spacing: 0.28em; text-indent: 0.28em;
+    color: rgba(252, 244, 230, 0.84);
     border-bottom: 1px solid transparent;
     transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
-    text-shadow: 0 2px 12px rgba(20, 12, 8, 0.55);
+    text-shadow: 0 2px 14px rgba(18, 10, 6, 0.78), 0 1px 4px rgba(10, 6, 4, 0.65);
   }
   .ghost-btn:hover, .ghost-btn:focus-visible {
     color: #fff;
@@ -98,13 +108,18 @@
   #top-bar.visible { opacity: 1; pointer-events: auto; }
   .hud-link {
     appearance: none; background: none; border: none; outline: none; cursor: pointer;
-    font-size: 10px; letter-spacing: 0.28em; font-weight: 400;
-    color: rgba(246, 242, 234, 0.52);
-    text-shadow: 0 1px 6px rgba(10, 12, 18, 0.45);
+    font-size: 11px; letter-spacing: 0.22em; font-weight: 400;
+    color: rgba(246, 242, 234, 0.66);
+    text-shadow: 0 1px 6px rgba(10, 12, 18, 0.52);
     transition: color 0.25s ease;
     padding: 4px 2px;
   }
   .hud-link:hover { color: rgba(255, 255, 255, 0.96); }
+  #top-bar.pale-ink .hud-link {
+    color: rgba(34, 42, 54, 0.76);
+    text-shadow: 0 1px 8px rgba(255, 255, 255, 0.55);
+  }
+  #top-bar.pale-ink .hud-link:hover { color: rgba(16, 22, 30, 0.98); }
 
   /* Ending Action Overlay */
   #ending-overlay {
@@ -161,32 +176,36 @@
   <div id="loading-overlay">
     <div id="load-title">ECHO</div>
     <div id="load-track"><div id="load-fill"></div></div>
-    <div id="load-label">AWAKENING</div>
+    <div id="load-label">万物初醒</div>
   </div>
 
   <div id="title-overlay">
-    <div class="title-mark">ECHO</div>
+    <div class="title-head">
+      <div class="title-mark">ECHO</div>
+      <div class="title-sub">回 · 响</div>
+    </div>
     <div class="title-actions">
-      <button id="btn-begin" class="ghost-btn primary">BEGIN</button>
-      <button id="btn-continue" class="ghost-btn" style="display:none">CONTINUE</button>
-      <button id="btn-sound-title" class="ghost-btn">SOUND  OFF</button>
-      <button id="btn-reset" class="ghost-btn" style="display:none">RESET</button>
+      <button id="btn-begin" class="ghost-btn primary">开始旅程</button>
+      <button id="btn-continue" class="ghost-btn" style="display:none">继续探索</button>
+      <button id="btn-sound-title" class="ghost-btn">声音  关</button>
+      <button id="btn-reset" class="ghost-btn" style="display:none">重置进度</button>
     </div>
   </div>
 
   <div id="top-bar">
-    <button id="btn-sound-hud" class="hud-link">SOUND OFF</button>
-    <button id="btn-checkpoint" class="hud-link">CHECKPOINT</button>
-    <button id="btn-menu" class="hud-link">MENU</button>
+    <button id="btn-guide-hud" class="hud-link">指引 开</button>
+    <button id="btn-sound-hud" class="hud-link">声音 关</button>
+    <button id="btn-checkpoint" class="hud-link">回到检查点</button>
+    <button id="btn-menu" class="hud-link">主菜单</button>
   </div>
 
   <div id="mobile-controls">
     <div id="joy-zone"><div id="joy-knob"></div></div>
-    <button id="btn-mobile-act" aria-label="Interact"></button>
+    <button id="btn-mobile-act" aria-label="交互"></button>
   </div>
 
   <div id="ending-overlay">
-    <button id="btn-new-journey" class="ghost-btn primary">NEW JOURNEY</button>
+    <button id="btn-new-journey" class="ghost-btn primary">重新启程</button>
   </div>
 
 <script>
@@ -195,7 +214,7 @@ try {
   if (navigator.onLine && location.protocol !== 'file:') {
     var l = document.createElement('link');
     l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Inter:wght@300;400&display=swap';
+    l.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Inter:wght@300;400&family=Noto+Serif+SC:wght@300;400&display=swap';
     document.head.appendChild(l);
   }
 } catch (_) {}
@@ -490,6 +509,8 @@ try {
     amber: {
       id: 'amber',
       name: 'AMBER',
+      nameZh: '琥珀核心',
+      powerZh: '供能',
       color: [0.95, 0.65, 0.25],
       emissive: [1.0, 0.72, 0.28],
       shellTint: [0.96, 0.74, 0.38],
@@ -500,6 +521,8 @@ try {
     verdant: {
       id: 'verdant',
       name: 'VERDANT',
+      nameZh: '翡翠核心',
+      powerZh: '生长',
       color: [0.24, 0.78, 0.56],
       emissive: [0.36, 0.92, 0.68],
       shellTint: [0.44, 0.88, 0.68],
@@ -510,6 +533,8 @@ try {
     violet: {
       id: 'violet',
       name: 'VIOLET',
+      nameZh: '紫色核心',
+      powerZh: '重力',
       color: [0.64, 0.44, 0.95],
       emissive: [0.76, 0.58, 1.0],
       shellTint: [0.78, 0.66, 0.98],
@@ -523,19 +548,21 @@ try {
     amber: {
       id: 'amber',
       title: 'AMBER',
+      titleZh: '琥珀荒原',
       seed: 104729,
       // Rich Monument Valley / COCOON warm desert palette
-      skyTop: [0.28, 0.20, 0.22],
-      skyMid: [0.76, 0.46, 0.28],
-      skyHorizon: [0.96, 0.74, 0.46],
+      skyTop: [0.24, 0.19, 0.28],
+      skyMid: [0.78, 0.44, 0.30],
+      skyHorizon: [0.98, 0.76, 0.48],
       fogColor: [0.89, 0.64, 0.41],
       fogDensity: 0.0092,
       fogHeightFalloff: 0.065,
       sunDir: [-0.66, 0.40, -0.62], // low golden angle for long dramatic shadows
-      sunColor: [1.26, 0.94, 0.62],
-      hemiSky: [0.92, 0.70, 0.50],
-      hemiGround: [0.24, 0.13, 0.10],
-      ambientStrength: 0.36,
+      sunColor: [1.30, 0.96, 0.62],
+      hemiSky: [0.95, 0.72, 0.56],
+      hemiGround: [0.28, 0.14, 0.22],
+      shadowTint: [0.46, 0.25, 0.38],
+      ambientStrength: 0.38,
       rimColor: [1.0, 0.80, 0.46],
       waterLevel: null,
       spawn: { x: 0, y: 0, z: 16.5 },
@@ -639,18 +666,20 @@ try {
     verdant: {
       id: 'verdant',
       title: 'VERDANT',
+      titleZh: '翡翠生境',
       seed: 208991,
       // Lush emerald, teal, pale mint, warm sunken limestone
-      skyTop: [0.06, 0.22, 0.23],
-      skyMid: [0.14, 0.42, 0.38],
-      skyHorizon: [0.62, 0.84, 0.76],
+      skyTop: [0.05, 0.20, 0.27],
+      skyMid: [0.14, 0.45, 0.42],
+      skyHorizon: [0.68, 0.88, 0.78],
       fogColor: [0.46, 0.72, 0.64],
       fogDensity: 0.0125,
       fogHeightFalloff: 0.075,
       sunDir: [-0.45, 0.72, -0.52],
-      sunColor: [0.98, 1.08, 0.94],
-      hemiSky: [0.64, 0.90, 0.80],
-      hemiGround: [0.08, 0.22, 0.19],
+      sunColor: [1.08, 1.12, 0.92],
+      hemiSky: [0.68, 0.94, 0.84],
+      hemiGround: [0.07, 0.22, 0.25],
+      shadowTint: [0.08, 0.28, 0.38],
       ambientStrength: 0.46,
       rimColor: [0.58, 0.98, 0.82],
       waterLevel: -0.34,
@@ -760,18 +789,20 @@ try {
     violet: {
       id: 'violet',
       title: 'VIOLET',
+      titleZh: '紫色虚空',
       seed: 314159,
       // Deep surreal violet, lavender, cosmic midnight blue, silver-white
-      skyTop: [0.05, 0.04, 0.13],
-      skyMid: [0.16, 0.11, 0.30],
-      skyHorizon: [0.36, 0.25, 0.54],
+      skyTop: [0.04, 0.03, 0.12],
+      skyMid: [0.16, 0.10, 0.32],
+      skyHorizon: [0.42, 0.26, 0.58],
       fogColor: [0.17, 0.12, 0.31],
       fogDensity: 0.0105,
       fogHeightFalloff: 0.035,
       sunDir: [0.52, 0.62, -0.58],
-      sunColor: [0.92, 0.86, 1.15],
+      sunColor: [1.02, 0.92, 1.24],
       hemiSky: [0.68, 0.56, 0.96],
       hemiGround: [0.12, 0.08, 0.24],
+      shadowTint: [0.12, 0.08, 0.28],
       ambientStrength: 0.44,
       rimColor: [0.84, 0.74, 1.0],
       waterLevel: null,
@@ -861,19 +892,21 @@ try {
     pale: {
       id: 'pale',
       title: 'PALE',
+      titleZh: '苍白起源',
       seed: 424242,
       // Pure ivory, pearl gray, serene pale ice-blue, minimal muted gold
-      skyTop: [0.58, 0.70, 0.84],
-      skyMid: [0.80, 0.86, 0.92],
-      skyHorizon: [0.94, 0.93, 0.89],
+      skyTop: [0.54, 0.68, 0.84],
+      skyMid: [0.80, 0.87, 0.93],
+      skyHorizon: [0.96, 0.95, 0.91],
       fogColor: [0.86, 0.89, 0.93],
       fogDensity: 0.0072,
       fogHeightFalloff: 0.038,
       sunDir: [-0.52, 0.62, -0.58],
-      sunColor: [1.14, 1.07, 0.94],
+      sunColor: [1.18, 1.10, 0.96],
       hemiSky: [0.82, 0.90, 0.99],
-      hemiGround: [0.42, 0.45, 0.52],
-      ambientStrength: 0.44,
+      hemiGround: [0.44, 0.50, 0.60],
+      shadowTint: [0.58, 0.68, 0.82],
+      ambientStrength: 0.42,
       rimColor: [1.0, 0.92, 0.72],
       waterLevel: null,
       spawn: { x: -3.5, y: 0, z: 26.2 },
@@ -2439,24 +2472,57 @@ try {
         }
       }
 
+      // 1.5 Hand-carved Temple Courtyard Medallions & Stepped Floor Inlays (elevates architectural craft!)
+      const addMedallion = (cx, y, cz, outerR, ringCol, innerCol, matId) => {
+        mb.addTorusArc(cx, y + 0.014, cz, outerR, 0.08, 28, 5, 0, Math.PI * 2, 0, 0, 0, ringCol, 0.56, matId);
+        mb.addTorusArc(cx, y + 0.018, cz, outerR * 0.56, 0.055, 20, 5, 0, Math.PI * 2, 0, 0, 0, innerCol, 0.45, matId);
+        for (let k = 0; k < 4; k++) {
+          const a = (k / 4) * Math.PI * 2 + Math.PI * 0.25;
+          mb.addChamferBox(cx + Math.cos(a) * outerR * 0.78, y + 0.012, cz + Math.sin(a) * outerR * 0.78, 0.42, 0.018, 0.09, 0.01, innerCol, innerCol, 0.48, matId, -a, null);
+        }
+      };
+      if (worldCfg.id === 'amber') {
+        addMedallion(0, 0, 15.5, 3.2, [0.68, 0.46, 0.28], [0.84, 0.64, 0.36], 1.0);
+        addMedallion(0, 0, 0.5, 3.8, [0.64, 0.43, 0.26], [0.90, 0.68, 0.36], 1.0);
+        addMedallion(19.0, 0, -0.5, 3.0, [0.60, 0.39, 0.25], [0.86, 0.62, 0.34], 1.0);
+        addMedallion(19.0, 0.8, -19.8, 3.1, [0.66, 0.46, 0.28], [0.92, 0.72, 0.38], 1.0);
+      } else if (worldCfg.id === 'verdant') {
+        addMedallion(0, 0, 0.5, 3.4, [0.22, 0.40, 0.35], [0.44, 0.74, 0.60], 2.0);
+        addMedallion(0, 0, -16.0, 3.0, [0.22, 0.40, 0.35], [0.46, 0.78, 0.62], 2.0);
+      } else if (worldCfg.id === 'violet') {
+        addMedallion(0, 0, 9.0, 3.1, [0.36, 0.30, 0.54], [0.72, 0.66, 0.92], 4.0);
+        addMedallion(0, 0.4, -10.5, 4.4, [0.38, 0.32, 0.58], [0.80, 0.74, 0.98], 4.0);
+      } else if (worldCfg.id === 'pale') {
+        addMedallion(0, 0, 24.5, 4.6, [0.80, 0.82, 0.86], [0.90, 0.78, 0.48], 5.0);
+        addMedallion(0, 1.8, -10.0, 6.2, [0.82, 0.84, 0.88], [0.92, 0.80, 0.48], 5.0);
+      }
+
       // 2. World-Specific Iconic Architecture & Environmental Storytelling!
       if (worldCfg.id === 'amber') {
-        const sandCol = [0.83, 0.61, 0.39];
-        const darkOchre = [0.54, 0.33, 0.21];
-        const bronze = [0.56, 0.40, 0.24];
-        const goldAccent = [0.96, 0.74, 0.34];
+        const sandCol = [0.84, 0.62, 0.40];
+        const darkOchre = [0.52, 0.32, 0.21];
+        const bronze = [0.58, 0.42, 0.25];
+        const goldAccent = [0.96, 0.75, 0.36];
 
-        // Monumental Colossal Broken Ring Arch framing the Title Screen & Awakening Canyon!
-        mb.addTorusArc(0, 4.2, 6.2, 8.6, 0.95, 28, 8, -0.35, Math.PI * 1.22, Math.PI * 0.5, 0.08, 0.12, [0.76, 0.52, 0.34], 0.82, 0.0);
-        // Inner bronze energy inlay strip on the great arch
-        mb.addTorusArc(0, 4.2, 6.2, 7.65, 0.18, 24, 6, -0.2, Math.PI * 1.15, Math.PI * 0.5, 0.08, 0.12, bronze, 0.42, 1.0);
+        // Monumental Colossal Broken Ring Arch framing the Title Screen & Awakening Canyon + Keystone Detailing!
+        mb.addTorusArc(0, 4.2, 6.2, 8.6, 0.95, 32, 8, -0.35, Math.PI * 1.22, Math.PI * 0.5, 0.08, 0.12, [0.77, 0.53, 0.35], 0.82, 0.0);
+        mb.addTorusArc(0, 4.2, 6.2, 7.65, 0.18, 28, 6, -0.2, Math.PI * 1.15, Math.PI * 0.5, 0.08, 0.12, bronze, 0.40, 1.0);
+        // Sculpted radial stone keystones along the arch ring
+        for (let k = 0; k < 5; k++) {
+          const ka = 0.25 + k * 0.52;
+          const kx = Math.cos(ka) * 8.6;
+          const ky = 4.2 + Math.sin(ka) * 8.6;
+          mb.addChamferBox(kx, ky, 6.2 + (k - 2) * 0.08, 0.62, 0.52, 1.15, 0.08, sandCol, darkOchre, 0.78, 0.0, 0, null);
+        }
 
-        // Hatching Biomechanical Chrysalis Shell behind player spawn (z = 19.2)
-        mb.addTorusArc(0, 0.5, 18.8, 1.65, 0.36, 14, 6, 0.1, Math.PI * 0.9, Math.PI * 0.5, 0.2, 0, bronze, 0.45, 1.0);
-        mb.addFacetedSpire(-1.1, 0.4, 19.0, 0.9, 1.9, 0.5, 0.8, 6, darkOchre, 0.75, 1.0, rng);
-        mb.addFacetedSpire(1.1, 0.4, 19.0, 0.9, 1.6, 0.5, 0.8, 6, darkOchre, 0.75, 1.0, rng);
+        // Hatching Biomechanical Chrysalis Shell behind player spawn (z = 18.8) with warm inner core crystal
+        mb.addTorusArc(0, 0.55, 18.8, 1.72, 0.34, 16, 6, 0.08, Math.PI * 0.92, Math.PI * 0.5, 0.2, 0, bronze, 0.42, 1.0);
+        mb.addTorusArc(0, 0.35, 18.8, 2.05, 0.14, 16, 5, 0.12, Math.PI * 0.88, Math.PI * 0.42, -0.15, 0, sandCol, 0.76, 0.0);
+        mb.addFacetedSpire(-1.15, 0.4, 19.0, 0.92, 1.95, 0.5, 0.82, 6, darkOchre, 0.74, 1.0, rng);
+        mb.addFacetedSpire(1.15, 0.4, 19.0, 0.92, 1.68, 0.5, 0.82, 6, darkOchre, 0.74, 1.0, rng);
+        mb.addFacetedSpire(0, 0.95, 18.85, 0.30, 0.58, 0.38, 0.30, 6, goldAccent, 0.28, 6.0, null);
 
-        // Flanking tapered obelisk pillars on Hatching Alcove & Sun Plaza (matching obstacles — framed cleanly for Title!)
+        // Flanking tapered obelisk pillars with Stepped Architectural Plinth Bases!
         const pillars = [
           [-4.4, 19.2, 4.8], [4.4, 19.2, 3.4],
           [-5.6, -3.6, 6.4], [-5.6, 4.5, 4.8],
@@ -2466,10 +2532,17 @@ try {
         for (let i = 0; i < pillars.length; i++) {
           const [px, pz, ph] = pillars[i];
           const py = pz < -16 ? 0.8 : 0;
-          mb.addPrism(px, py, py + ph, pz, 0.85, 0.52, 6, sandCol, darkOchre, 0.82, 0.0, 0.3);
-          // Bronze collar ring near top
-          mb.addTorusArc(px, py + ph * 0.78, pz, 0.65, 0.10, 12, 5, 0, Math.PI * 2, 0, 0, 0, bronze, 0.42, 1.0);
-          mb.addPrism(px, py + ph * 0.82, py + ph * 0.86, pz, 0.62, 0.62, 6, goldAccent, goldAccent, 0.3, 6.0, 0.3);
+          mb.addChamferBox(px, py + 0.16, pz, 1.12, 0.16, 1.12, 0.05, sandCol, darkOchre, 0.82, 0.0, 0.3, null);
+          mb.addPrism(px, py + 0.30, py + ph, pz, 0.82, 0.50, 10, sandCol, darkOchre, 0.80, 0.0, 0.3);
+          mb.addTorusArc(px, py + ph * 0.78, pz, 0.64, 0.10, 14, 5, 0, Math.PI * 2, 0, 0, 0, bronze, 0.40, 1.0);
+          mb.addPrism(px, py + ph * 0.82, py + ph * 0.86, pz, 0.61, 0.61, 10, goldAccent, goldAccent, 0.3, 6.0, 0.3);
+        }
+
+        // Ruined Colonnade Fragments in mid-ground canyon for ancient scale
+        const ruins = [[-13.5, 11.0, 5.5], [-16.0, 15.5, 3.8], [13.0, 15.0, 4.6], [28.5, -8.5, 6.2]];
+        for (const [rx, rz, rh] of ruins) {
+          mb.addPrism(rx, -6.0, -6.0 + rh, rz, 1.05, 0.88, 8, sandCol, darkOchre, 0.86, 0.0, 0.2);
+          mb.addTorusArc(rx, -6.0 + rh - 0.4, rz, 0.94, 0.12, 12, 5, 0, Math.PI * 2, 0, 0, 0, bronze, 0.48, 1.0);
         }
 
         // Half-buried Biomechanical Leviathan Ribcage arcing beside Central Sun Plaza!
@@ -2484,8 +2557,12 @@ try {
         mb.addTorusArc(19.0, 5.8, -24.6, 5.6, 0.52, 28, 8, 0, Math.PI * 2, Math.PI * 0.5, 0, 0, sandCol, 0.78, 0.0);
         mb.addTorusArc(19.0, 5.8, -24.6, 4.6, 0.16, 24, 6, 0, Math.PI * 2, Math.PI * 0.5, 0, 0, goldAccent, 0.32, 6.0);
 
-        // Vast background wind-eroded canyon floor & distant low desert mesas (keeps upper horizon sky open & monumental!)
+        // Vast background wind-eroded canyon floor, sculpted sand-dune drift ridges & distant low desert mesas
         mb.addChamferBox(8, -10.5, 0, 110, 1.8, 110, 0.5, [0.74, 0.51, 0.33], [0.50, 0.31, 0.20], 0.92, 0.0, 0, null);
+        const dunes = [[-12, 26, 18, 1.3, 4.2, 0.3], [22, 14, 22, 1.6, 4.8, -0.35], [-20, -14, 20, 1.8, 5.2, 0.45], [8, -28, 24, 1.5, 4.5, -0.2]];
+        for (const [dx, dz, hx, hy, hz, ry] of dunes) {
+          mb.addChamferBox(dx, -8.8, dz, hx, hy, hz, 0.9, [0.80, 0.57, 0.37], [0.62, 0.40, 0.25], 0.94, 0.0, ry, null);
+        }
         const mesas = [
           [-34, -18, 10, 9, 9], [-28, 22, 8, 7, 7], [42, 16, 11, 10, 10],
           [46, -28, 13, 12, 11], [-22, -44, 15, 10, 8], [26, 40, 14, 7, 8]
@@ -2526,7 +2603,24 @@ try {
           mb.addGiantFungus(fx, fy, fz, fh, fr, lx, lz, rng);
         }
 
-        // Overgrown Sunken Ancient Temple Arches & Broken Columns rising from shallow pools
+        // Floating Sculpted Lily-Pad Clusters & Bioluminescent Lotus Buds on the shallow lagoon water!
+        const lilyClusters = [
+          [-7.5, -4.8], [-5.6, -9.8], [5.8, -6.5], [7.2, -11.2],
+          [11.2, -9.8], [16.5, -9.5], [30.2, -7.5], [32.8, -24.2], [17.8, -25.4]
+        ];
+        for (const [lx, lz] of lilyClusters) {
+          for (let j = 0; j < 3; j++) {
+            const ox = lx + (rng() - 0.5) * 2.8;
+            const oz = lz + (rng() - 0.5) * 2.8;
+            const pr = 0.48 + rng() * 0.45;
+            mb.addPrism(ox, -0.33, -0.28, oz, pr, pr * 0.96, 9, [0.16, 0.52, 0.42], [0.10, 0.36, 0.30], 0.52, 3.0, rng() * 6);
+            if (j === 0) {
+              mb.addFacetedSpire(ox, -0.20, oz, 0.16, 0.24, 0.08, 0.16, 6, [0.76, 0.98, 0.88], 0.32, 6.0, null);
+            }
+          }
+        }
+
+        // Overgrown Sunken Ancient Temple Arches & Stepped Columns rising from shallow pools
         mb.addTorusArc(0, 2.2, -21.2, 6.2, 0.62, 24, 7, -0.1, Math.PI * 1.1, Math.PI * 0.5, 0, 0, templeCol, 0.76, 2.0);
         mb.addTorusArc(24, 0.2, -16, 12.6, 0.65, 36, 6, 0, Math.PI * 2, 0, 0, 0, templeDark, 0.80, 2.0); // Outer Lagoon Retaining Wall
         // Submerged temple pillars around lagoon perimeter
@@ -2535,7 +2629,8 @@ try {
           const px = 24 + Math.cos(a) * 13.8;
           const pz = -16 + Math.sin(a) * 13.8;
           const h = 3.2 + (i % 3) * 1.6;
-          mb.addPrism(px, -2.0, h, pz, 0.72, 0.54, 6, templeCol, templeDark, 0.76, 2.0, a);
+          mb.addPrism(px, -2.0, -0.2, pz, 1.05, 0.92, 8, templeDark, templeDark, 0.80, 2.0, a);
+          mb.addPrism(px, -0.2, h, pz, 0.70, 0.52, 10, templeCol, templeDark, 0.76, 2.0, a);
           if (i % 2 === 0) {
             mb.addTorusArc(px, h * 0.75, pz, 0.62, 0.09, 12, 5, 0, Math.PI * 2, 0, 0, 0, bronze, 0.45, 1.0);
           }
@@ -2558,14 +2653,24 @@ try {
         const silver = [0.76, 0.74, 0.88];
         const violetGlow = [0.76, 0.58, 1.0];
 
-        // Flanking gravity-defying tilted monoliths on islands (matching obstacles!)
+        // Flanking gravity-defying tilted monoliths with stepped bases on islands!
         const obelisks = [
           [-4.5, 12.6, 4.6, 0.08], [4.5, 12.6, 4.6, -0.08],
           [-20.5, 9.5, 5.4, 0.12], [20.5, 9.5, 5.4, -0.12]
         ];
         for (const [ox, oz, oh, tilt] of obelisks) {
-          mb.addPrism(ox, 0, oh, oz, 0.72, 0.28, 5, silver, basalt, 0.56, 4.0, tilt, 0.35);
+          mb.addPrism(ox, 0, 0.28, oz, 1.0, 0.86, 6, silver, basalt, 0.56, 4.0, tilt);
+          mb.addPrism(ox, 0.26, oh, oz, 0.70, 0.28, 6, silver, basalt, 0.54, 4.0, tilt, 0.35);
           mb.addTorusArc(ox, oh * 0.68, oz, 0.75, 0.08, 14, 5, 0, Math.PI * 2, 0.2, 0, tilt, violetGlow, 0.3, 6.0);
+        }
+
+        // Delicate Floating Silver Astrolabe Rings & Orbiting Crystal Shards around the Void Sanctum
+        mb.addTorusArc(0, 0.4, -10.5, 7.6, 0.08, 36, 5, 0, Math.PI * 2, 0.18, 0.3, -0.14, silver, 0.36, 4.0);
+        mb.addTorusArc(0, 2.4, 9.0, 6.8, 0.06, 28, 5, -0.4, Math.PI * 1.1, -0.45, 0.2, 0.3, violetGlow, 0.32, 6.0);
+        for (let k = 0; k < 8; k++) {
+          const ca = (k / 8) * Math.PI * 2 + 0.2;
+          const cr = 10.5 + (k % 2) * 3.5;
+          mb.addFacetedSpire(Math.cos(ca) * cr, 1.2 + (k % 3) * 1.3, -10.5 + Math.sin(ca) * cr, 0.26, 0.72, 0.65, 0.26, 5, violetGlow, 0.3, 6.0, rng);
         }
 
         // Colossal Fractured Celestial Orbital Rings suspended in the deep cosmic void!
@@ -2573,7 +2678,7 @@ try {
         mb.addTorusArc(0, 5.5, -18.0, 17.5, 0.34, 34, 6, 0.2, Math.PI * 1.45, -0.35, -0.4, 0.15, silver, 0.42, 4.0);
         mb.addTorusArc(-14, -4.0, 4.0, 13.0, 0.45, 24, 6, 0.0, Math.PI * 0.9, 1.15, 0.5, 0.3, basalt, 0.65, 4.0);
 
-        // Surreal Escher-like angled floating island shards in mid-distance
+        // Surreal Escher-like angled floating island shards with geometric step-terraces
         const shards = [
           [-26, 4, -8, 2.8, 3.2, 5.5], [26, 5, -6, 3.0, 2.8, 6.0],
           [-14, 8, -28, 3.6, 4.2, 7.2], [16, 7, -26, 3.4, 3.8, 6.8],
@@ -2582,8 +2687,8 @@ try {
         ];
         for (const [sx, sy, sz, rx, rt, rb] of shards) {
           mb.addFacetedSpire(sx, sy, sz, rx, rt, rb, rx * 0.85, 7, basalt, 0.66, 4.0, rng);
-          // Tiny inverted silver monolith perched sideways on shard
-          mb.addChamferBox(sx, sy + rt * 0.7, sz, rx * 0.35, 1.1, rx * 0.35, 0.06, silver, basalt, 0.5, 4.0, rng() * 3, null);
+          mb.addChamferBox(sx, sy + rt * 0.55, sz, rx * 0.62, 0.35, rx * 0.62, 0.06, basalt, silver, 0.56, 4.0, rng() * 2, null);
+          mb.addChamferBox(sx, sy + rt * 0.85, sz, rx * 0.35, 1.1, rx * 0.35, 0.06, silver, basalt, 0.5, 4.0, rng() * 3, null);
         }
       }
 
@@ -2592,11 +2697,13 @@ try {
         const pearl = [0.78, 0.81, 0.85];
         const gold = [0.92, 0.79, 0.48];
 
-        // Threshold Colonnade Pillars (matching obstacles)
+        // Threshold Colonnade Pillars (14-sided sculpted columns + stepped plinth bases & capitals!)
         const tCols = [[-7.8, 19.2], [7.8, 19.2], [-7.8, 29.8], [7.8, 29.8]];
         for (const [cx, cz] of tCols) {
-          mb.addPrism(cx, 0, 7.2, cz, 0.75, 0.65, 12, ivory, pearl, 0.52, 5.0, 0);
-          mb.addTorusArc(cx, 6.6, cz, 0.78, 0.11, 16, 6, 0, Math.PI * 2, 0, 0, 0, gold, 0.32, 1.0);
+          mb.addChamferBox(cx, 0.18, cz, 1.05, 0.18, 1.05, 0.05, ivory, pearl, 0.52, 5.0, 0, null);
+          mb.addPrism(cx, 0.34, 7.2, cz, 0.74, 0.64, 14, ivory, pearl, 0.50, 5.0, 0);
+          mb.addChamferBox(cx, 7.28, cz, 0.90, 0.14, 0.90, 0.04, ivory, pearl, 0.48, 5.0, 0, null);
+          mb.addTorusArc(cx, 6.6, cz, 0.78, 0.11, 18, 6, 0, Math.PI * 2, 0, 0, 0, gold, 0.32, 1.0);
         }
 
         // Great Origin Gate Frame (monumental 15m ivory arch at z = 16.8!)
@@ -2604,6 +2711,18 @@ try {
         mb.addChamferBox(5.2, 6.8, 16.8, 1.5, 7.2, 1.5, 0.18, ivory, pearl, 0.52, 5.0, 0, null);
         mb.addChamferBox(0, 14.2, 16.8, 7.2, 1.1, 1.6, 0.18, ivory, pearl, 0.48, 5.0, 0, null);
         mb.addTorusArc(0, 14.2, 16.8, 2.6, 0.22, 24, 6, 0, Math.PI * 2, Math.PI * 0.5, 0, 0, gold, 0.32, 6.0);
+
+        // Delicate Golden Archways framing the Grand Ascending Causeway
+        for (const az of [12.0, 5.5]) {
+          const ay = az === 12.0 ? 0.55 : 1.25;
+          mb.addTorusArc(0, ay + 2.4, az, 3.85, 0.13, 22, 6, 0, Math.PI, Math.PI * 0.5, 0, 0, gold, 0.32, 1.0);
+        }
+
+        // Radial Gold Floor Meridian Strips radiating from Central Awakening Orrery toward Triad & Wings!
+        mb.addChamferBox(0, 1.815, -10.0, 9.8, 0.02, 0.11, 0.005, gold, gold, 0.32, 1.0, 0, null);
+        mb.addChamferBox(0, 1.815, -10.0, 0.11, 0.02, 8.2, 0.005, gold, gold, 0.32, 1.0, 0, null);
+        mb.addChamferBox(-2.2, 1.815, -8.6, 2.8, 0.02, 0.09, 0.005, gold, gold, 0.32, 1.0, -0.58, null);
+        mb.addChamferBox(2.2, 1.815, -8.6, 2.8, 0.02, 0.09, 0.005, gold, gold, 0.32, 1.0, 0.58, null);
 
         // Endless-looking stepped grand ceremonial columns encircling the Pale Origin Sanctum!
         for (let i = 0; i < 12; i++) {
@@ -2613,8 +2732,9 @@ try {
           const r = 13.8;
           const cx = Math.cos(a) * r;
           const cz = -10.0 + Math.sin(a) * r;
-          mb.addPrism(cx, -2.0, 11.5, cz, 0.82, 0.66, 12, ivory, pearl, 0.52, 5.0, a);
-          mb.addTorusArc(cx, 10.6, cz, 0.78, 0.09, 14, 5, 0, Math.PI * 2, 0, 0, 0, gold, 0.35, 1.0);
+          mb.addPrism(cx, -2.0, 11.5, cz, 0.82, 0.66, 14, ivory, pearl, 0.50, 5.0, a);
+          mb.addChamferBox(cx, 11.6, cz, 0.92, 0.16, 0.92, 0.04, ivory, pearl, 0.48, 5.0, a, null);
+          mb.addTorusArc(cx, 10.6, cz, 0.78, 0.09, 16, 5, 0, Math.PI * 2, 0, 0, 0, gold, 0.35, 1.0);
         }
 
         // Central Orrery Plinth Column
@@ -2859,8 +2979,11 @@ try {
           mb.addTri(tail, loops[0][ni], loops[0][i], under, 0.75, 0.9, 0.9, 0.5, 1.0);
           mb.addTri(nose, loops[loops.length - 1][i], loops[loops.length - 1][ni], shell, 1.0, 0.95, 0.95, 0.42, 5.0);
         }
-        // Decorative ancient dorsal gold spine seam
-        mb.addChamferBox(0, 0.36, -0.02, 0.07, 0.05, 0.34, 0.02, goldRim, goldRim, 0.32, 1.0, 0, null);
+        // Decorative ancient dorsal gold spine seam & bioluminescent dorsal ribs (crisp silhouette in all worlds!)
+        mb.addChamferBox(0, 0.36, -0.02, 0.075, 0.055, 0.36, 0.02, [0.22, 0.24, 0.28], goldRim, 0.30, 1.0, 0, null);
+        for (let r = -1; r <= 1; r++) {
+          mb.addChamferBox(0, 0.39, r * 0.16, 0.14, 0.022, 0.032, 0.008, [0.76, 0.96, 1.0], [0.76, 0.96, 1.0], 0.25, 6.0, 0, null);
+        }
         assets.creatureBody = mb.pack();
       }
 
@@ -2868,8 +2991,8 @@ try {
         // Sculpted Hinged Back Armor Wing (Left / Right mirrored via scale X)
         const mb = new MeshBuilder();
         const wingCol = [0.92, 0.90, 0.85];
-        const innerCol = [0.36, 0.32, 0.28];
-        // Curved teardrop carapace plate
+        const innerCol = [0.26, 0.24, 0.26];
+        // Curved teardrop carapace plate with fine obsidian border rim
         mb.addChamferBox(0.18, 0.05, -0.05, 0.20, 0.045, 0.36, 0.03, wingCol, innerCol, 0.40, 5.0, -0.14, null);
         mb.addFacetedSpire(0.24, 0.06, -0.34, 0.14, 0.08, 0.04, 0.18, 5, wingCol, 0.40, 5.0, null);
         assets.creatureWing = mb.pack();
@@ -2896,22 +3019,30 @@ try {
         assets.creatureHead = mb.pack();
       }
 
+      {
+        // Hovering Beacon Crystal (clean architectural diamond chevron above interactables)
+        const mb = new MeshBuilder();
+        mb.addFacetedSpire(0, 0, 0, 0.68, 1.15, 1.15, 0.68, 4, [1, 1, 1], 0.24, 6.0, null);
+        assets.beacon = mb.pack();
+      }
+
       return assets;
     }
 
     function runBuild(worldConfigs, reportProgress) {
       const worldMeshes = {};
       const ids = Object.keys(worldConfigs);
-      reportProgress(0.08, 'SHAPING ANCIENT FORMS');
+      const zhMap = { amber: '琥珀荒原', verdant: '翡翠生境', violet: '紫色虚空', pale: '苍白起源' };
+      reportProgress(0.08, '塑形古代遗迹');
       const shared = buildSharedPrimitives();
-      reportProgress(0.28, 'SCULPTING WORLDS');
+      reportProgress(0.28, '雕刻四重世界');
 
       for (let i = 0; i < ids.length; i++) {
         const id = ids[i];
         worldMeshes[id] = buildWorldStatic(worldConfigs[id]);
-        reportProgress(0.28 + ((i + 1) / ids.length) * 0.68, 'GENERATING ' + id.toUpperCase());
+        reportProgress(0.28 + ((i + 1) / ids.length) * 0.68, '生成 ' + (zhMap[id] || id.toUpperCase()));
       }
-      reportProgress(1.0, 'AWAKENING');
+      reportProgress(1.0, '万物初醒');
       return { worlds: worldMeshes, shared };
     }
 
@@ -3079,6 +3210,7 @@ try {
   uniform vec3 uSunColor;
   uniform vec3 uHemiSky;
   uniform vec3 uHemiGround;
+  uniform vec3 uShadowTint;
   uniform float uAmbientStr;
   uniform vec3 uFogColor;
   uniform float uFogDensity;
@@ -3118,15 +3250,24 @@ try {
     vec3 proj = sp.xyz / max(sp.w, 0.0001);
     proj = proj * 0.5 + 0.5;
     if (proj.x < 0.01 || proj.x > 0.99 || proj.y < 0.01 || proj.y > 0.99 || proj.z > 0.999) return 1.0;
-    float bias = max(0.0018 * (1.0 - ndl), 0.0006);
+    float bias = max(0.0017 * (1.0 - ndl), 0.0005);
+    float ang = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) * 6.283185;
+    float ca = cos(ang), sa = sin(ang);
+    mat2 rot = mat2(ca, -sa, sa, ca);
+    vec2 poisson[12] = vec2[](
+      vec2(-0.326, -0.406), vec2(-0.840, -0.074), vec2(-0.696,  0.457),
+      vec2(-0.203,  0.621), vec2( 0.962, -0.195), vec2( 0.473, -0.480),
+      vec2( 0.519,  0.767), vec2( 0.185, -0.893), vec2( 0.507,  0.064),
+      vec2( 0.896,  0.412), vec2(-0.322, -0.933), vec2(-0.792, -0.598)
+    );
+    vec2 spread = uShadowTexel * 1.45;
     float sum = 0.0;
-    for (int x = -1; x <= 1; x++) {
-      for (int y = -1; y <= 1; y++) {
-        float d = texture(uShadowMap, proj.xy + vec2(x, y) * uShadowTexel).r;
-        sum += (proj.z - bias <= d) ? 1.0 : 0.0;
-      }
+    for (int i = 0; i < 12; i++) {
+      vec2 off = (rot * poisson[i]) * spread;
+      float d = texture(uShadowMap, proj.xy + off).r;
+      sum += (proj.z - bias <= d) ? 1.0 : 0.0;
     }
-    return sum / 9.0;
+    return sum / 12.0;
   }
 
   void main() {
@@ -3211,12 +3352,17 @@ try {
     float specStr = (abs(matId - 1.0) < 0.35) ? 0.55 : (abs(matId - 5.0) < 0.35 ? 0.22 : 0.12);
     vec3 spec = uSunColor * pow(ndh, shininess) * specStr * (1.0 - rough * 0.7) * shadow;
 
-    // Subtle atmospheric rim/Fresnel light
+    // Subtle atmospheric rim/Fresnel light + delicate bevel catch-light along architectural edges
     float fresnel = pow(1.0 - max(dot(N, V), 0.0), 3.4);
     float rimAmt = (abs(matId - 4.0) < 0.35) ? 0.34 : 0.16;
     vec3 rim = uRimColor * fresnel * rimAmt * (0.45 + 0.55 * shadow);
+    float edgeBevel = clamp(length(fwidth(N)) * 0.42, 0.0, 1.0);
+    vec3 edgeSpec = uSunColor * edgeBevel * 0.14 * (0.4 + 0.6 * shadow);
 
-    vec3 lit = albedo * (ambient + uSunColor * (ndl * shadow + sss)) + spec + rim;
+    // Painterly chromatic shadow tint + vertical abyss depth shading
+    vec3 shadowTone = mix(uShadowTint, vec3(1.0), shadow * smoothstep(-0.08, 0.25, ndlRaw));
+    float depthShade = mix(0.68, 1.0, smoothstep(-8.0, 2.0, vWorldPos.y));
+    vec3 lit = albedo * (ambient * shadowTone + uSunColor * (ndl * shadow + sss)) * depthShade + spec + rim + edgeSpec;
 
     // Emissive material (matId == 6) or explicit emissive boost
     if (matId > 5.5 || uEmissiveBoost > 0.001) {
@@ -3225,12 +3371,14 @@ try {
       lit += albedo * em * pulse;
     }
 
-    // Dual-layer distance + height volumetric fog
+    // Dual-layer distance + height volumetric fog with directional sun in-scattering
     float dist = length(uCamPos - vWorldPos);
     float heightFactor = exp(-max(vWorldPos.y + 4.0, 0.0) * uFogHeightFalloff);
     float fogAmt = 1.0 - exp(-dist * uFogDensity * (0.62 + 0.55 * heightFactor));
     fogAmt = clamp(fogAmt, 0.0, 0.94);
-    vec3 finalCol = mix(lit, uFogColor, fogAmt);
+    float sunInScatter = pow(max(dot(-V, L), 0.0), 3.0) * 0.35;
+    vec3 scatterFog = mix(uFogColor, uSunColor * 0.78 + uFogColor * 0.28, sunInScatter);
+    vec3 finalCol = mix(lit, scatterFog, fogAmt);
 
     outColor = vec4(finalCol, 1.0);
   }`;
@@ -3293,20 +3441,26 @@ try {
     vec3 V = normalize(uCamPos - vWorldPos);
     vec3 L = normalize(-uSunDir);
 
-    float fresnel = pow(1.0 - max(dot(N, V), 0.0), 3.0);
-    vec3 deepCol = vec3(0.06, 0.25, 0.26);
-    vec3 shallowCol = vec3(0.16, 0.48, 0.44);
+    float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.8);
+    vec3 deepCol = vec3(0.05, 0.23, 0.26);
+    vec3 shallowCol = vec3(0.16, 0.50, 0.45);
     float shoreProx = smoothstep(14.0, 4.0, length(p - vec2(0.0, -7.0))) +
                       smoothstep(15.0, 7.5, length(p - vec2(24.0, -16.0)));
+    // Dancing shallow-water interference caustics on the translucent lagoon floor
+    float causA = sin(p.x * 1.45 + p.y * 1.15 + uTime * 1.1) * cos(p.x * 0.95 - p.y * 1.55 - uTime * 0.95);
+    float causB = sin(p.x * 2.20 - p.y * 1.35 - uTime * 1.35) * cos(p.y * 2.05 + p.x * 0.85 + uTime * 0.8);
+    float caustics = smoothstep(0.42, 0.96, abs(causA + causB) * 0.55) * clamp(shoreProx, 0.15, 1.0);
     vec3 waterBase = mix(deepCol, shallowCol, clamp(shoreProx * 0.65 + (w1 + w2) * 0.08, 0.0, 1.0));
+    waterBase += vec3(0.24, 0.68, 0.58) * caustics * 0.22;
 
-    // Sky reflection + crisp sun specular sparkle + delicate concentric shore ripples
+    // Sky reflection + crisp sun specular sparkle + delicate meniscus shore ripples
     vec3 H = normalize(L + V);
-    float spec = pow(max(dot(N, H), 0.0), 110.0) * 0.95;
-    float waveHighlight = smoothstep(0.55, 0.98, (w1 + w2) * 0.5 + 0.5) * 0.14;
-    vec3 col = mix(waterBase, uSkyColor * 1.04, clamp(fresnel * 0.78 + 0.16, 0.0, 0.88));
+    float spec = pow(max(dot(N, H), 0.0), 120.0) * 1.05;
+    float waveHighlight = smoothstep(0.55, 0.98, (w1 + w2) * 0.5 + 0.5) * 0.16;
+    float meniscus = smoothstep(0.65, 0.95, shoreProx) * (0.5 + 0.5 * sin(shoreProx * 22.0 - uTime * 1.8)) * 0.14;
+    vec3 col = mix(waterBase, uSkyColor * 1.06, clamp(fresnel * 0.82 + 0.16, 0.0, 0.90));
     col += uSunColor * spec;
-    col += vec3(0.58, 0.96, 0.86) * (abs(ripH) * 0.65 + max(0.0, w3) * 0.12 + waveHighlight);
+    col += vec3(0.62, 0.98, 0.88) * (abs(ripH) * 0.68 + max(0.0, w3) * 0.14 + waveHighlight + meniscus);
 
     float dist = length(uCamPos - vWorldPos);
     float fogAmt = clamp(1.0 - exp(-dist * uFogDensity * 0.95), 0.0, 0.92);
@@ -3375,37 +3529,40 @@ try {
     // Slight glass refraction bend
     lensUV += (lensUV - 0.5) * (1.0 - ndv) * 0.22;
 
-    // Procedural miniature landscape & swirling clouds (rich saturated world identity!)
+    // Procedural miniature landscape, internal caustics & delicate filigree shimmer (rich glass-diorama craft!)
     vec2 sphUV = vec2(atan(vLocalPos.z, vLocalPos.x) / 6.28318 + 0.5, vLocalPos.y * 0.5 + 0.5);
     float cloud = noise2(sphUV * vec2(5.5, 3.8) + vec2(uTime * 0.07, 0.0)) * 0.6 +
                   noise2(sphUV * vec2(12.0, 7.5) - vec2(uTime * 0.11, 0.0)) * 0.4;
-    float terrainBand = smoothstep(-0.35, 0.35, vLocalPos.y + (cloud - 0.5) * 0.32);
+    float terrainBand = smoothstep(-0.38, 0.36, vLocalPos.y + (cloud - 0.5) * 0.34);
+    float causticSwirl = smoothstep(0.55, 0.95, sin(vLocalPos.x * 7.5 + uTime * 0.8) * cos(vLocalPos.z * 7.5 - uTime * 0.6) * 0.5 + 0.5);
 
-    vec3 procInterior = mix(uCoreColor * 0.85, uEmissive * 0.92, terrainBand);
-    // Miniature glowing equatorial world-arch & inner terrain contour inside the orb!
-    float eqRing = exp(-abs(vLocalPos.y + sin(vLocalPos.x * 3.5 + uTime * 0.45) * 0.16) * 14.0);
-    procInterior += uShellTint * eqRing * 0.35;
+    vec3 procInterior = mix(uCoreColor * 0.78, uEmissive * 0.88, terrainBand);
+    procInterior += uShellTint * causticSwirl * 0.14;
+    // Miniature glowing equatorial filigree shimmer inside glass orb
+    float eqRing = exp(-abs(vLocalPos.y + sin(vLocalPos.x * 3.5 + uTime * 0.45) * 0.16) * 16.0);
+    procInterior += uShellTint * eqRing * 0.38;
 
     vec3 interior = procInterior;
     if (uUsePreviewTex > 0.5) {
       vec3 texCol = texture(uPreviewTex, clamp(lensUV, 0.06, 0.94)).rgb;
-      // Blend live miniature FBO render cleanly with core world chromatic identity (prevents washed-out white!)
-      vec3 gradedTex = mix(texCol, texCol * uShellTint * 1.12, 0.38);
-      interior = mix(procInterior, gradedTex, 0.66);
+      vec3 gradedTex = mix(texCol, texCol * uShellTint * 1.15, 0.44);
+      interior = mix(procInterior, gradedTex, 0.64);
     }
 
     // Translucent swirling atmosphere ribbons inside glass shell
-    interior = mix(interior, uShellTint * 1.05, smoothstep(0.62, 0.92, cloud) * 0.24);
+    interior = mix(interior, uShellTint * 0.98, smoothstep(0.64, 0.94, cloud) * 0.20);
 
-    // Mineral-glass specular & vibrant Fresnel rim
+    // Double-specular crystal glass highlight + vibrant Fresnel aura (never blown-out white)
     vec3 L = normalize(vec3(-0.5, 0.8, 0.4));
+    vec3 L2 = normalize(vec3(0.6, 0.4, -0.6));
     vec3 H = normalize(L + V);
-    float spec = pow(max(dot(N, H), 0.0), 80.0) * 0.62;
+    vec3 H2 = normalize(L2 + V);
+    float spec = pow(max(dot(N, H), 0.0), 110.0) * 0.68 + pow(max(dot(N, H2), 0.0), 60.0) * 0.24;
 
-    vec3 col = interior * (0.64 + 0.36 * ndv);
-    col += uShellTint * fresnel * (0.85 + uHighlight * 0.45);
+    vec3 col = interior * (0.58 + 0.42 * ndv);
+    col += uShellTint * fresnel * (0.90 + uHighlight * 0.45);
     col += vec3(1.0) * spec;
-    col += uEmissive * (0.08 + uHighlight * 0.18) * (0.88 + 0.12 * sin(uTime * 2.8));
+    col += uEmissive * (0.06 + uHighlight * 0.16) * (0.88 + 0.12 * sin(uTime * 2.8));
 
     outColor = vec4(col, 1.0);
   }`;
@@ -3653,8 +3810,12 @@ try {
       col = mix(col, vec3(0.95, 0.42, 0.34), edge * uRejectFlash * 0.25);
     }
 
-    // Filmic tone-mapping & gentle cinematic vignette
+    // Filmic tone-mapping + subtle vibrance preservation + warm-highlight/cool-shadow split tone
     col = acesFilm(col * 1.06);
+    float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+    col = mix(vec3(luma), col, 1.12);
+    vec3 splitCol = mix(col * vec3(0.97, 0.98, 1.03), col * vec3(1.02, 1.01, 0.97), smoothstep(0.25, 0.82, luma));
+    col = clamp(splitCol, 0.0, 1.0);
     float vig = 1.0 - smoothstep(0.48, 1.18, length((vUV - 0.5) * vec2(1.25, 1.0)));
     col *= mix(0.84, 1.0, vig);
 
@@ -4197,6 +4358,7 @@ try {
       gl.uniform3fv(p.u.uSunColor, worldCfg.sunColor);
       gl.uniform3fv(p.u.uHemiSky, worldCfg.hemiSky);
       gl.uniform3fv(p.u.uHemiGround, worldCfg.hemiGround);
+      gl.uniform3fv(p.u.uShadowTint, worldCfg.shadowTint || [0.35, 0.32, 0.45]);
       gl.uniform1f(p.u.uAmbientStr, worldCfg.ambientStrength);
       gl.uniform3fv(p.u.uFogColor, worldCfg.fogColor);
       gl.uniform1f(p.u.uFogDensity, worldCfg.fogDensity);
@@ -4235,7 +4397,7 @@ try {
         gl.bindTexture(gl.TEXTURE_2D, this.sceneTex);
         gl.uniform1i(blur.u.uTex, 0);
         gl.uniform2f(blur.u.uDir, 1.6 / this.bloomW, 0.0);
-        gl.uniform1f(blur.u.uThreshold, 0.78);
+        gl.uniform1f(blur.u.uThreshold, 0.84);
         gl.bindVertexArray(this.quadVAO);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
 
@@ -4262,7 +4424,7 @@ try {
       gl.uniform1i(post.u.uBloomTex, 1);
 
       gl.uniform1f(post.u.uUseBloom, useBloom ? 1.0 : 0.0);
-      gl.uniform1f(post.u.uBloomStrength, this.qualityTier === 2 ? 0.34 : 0.24);
+      gl.uniform1f(post.u.uBloomStrength, this.qualityTier === 2 ? 0.24 : 0.18);
       gl.uniform1f(post.u.uTransProgress, transProgress || 0);
       gl.uniform2f(post.u.uTransCenter, transCenter ? transCenter[0] : 0.5, transCenter ? transCenter[1] : 0.5);
       gl.uniform1f(post.u.uTransDir, transDir || 1);
@@ -4800,6 +4962,19 @@ try {
         }
       }
 
+      // 4.5 Delicate Floating Beacon Chevron above the active nearby interactable
+      if (!isShadowPass && nearestInteractable && !state.flags.endingTriggered && r.meshes.beacon) {
+        const it = nearestInteractable.item;
+        const seated = state.getOrbOnPedestal(it.id);
+        const by = it.y + (seated ? 1.95 : it.type === 'ascender' ? 2.15 : 1.48) + Math.sin(time * 3.4) * 0.08;
+        const col = it.type.includes('amber') ? [1.0, 0.78, 0.36]
+                  : it.type.includes('verdant') ? [0.42, 0.98, 0.74]
+                  : it.type.includes('violet') ? [0.80, 0.64, 1.0]
+                  : seated && ECHO.ORB_META[seated] ? ECHO.ORB_META[seated].emissive
+                  : [0.96, 0.97, 1.0];
+        r.drawMesh(r.meshes.beacon, it.x, by, it.z, 0, time * 1.6, 0, 0.14, 0.14, 0.14, col, 1.15, false, false);
+      }
+
       // 5. GUARDIAN #1 — THE RING COLOSSUS (VERDANT)
       if (worldId === 'verdant') {
         const g = w.guardian1;
@@ -4977,8 +5152,8 @@ try {
       }
     }
 
-    // Draw soft contact shadows & subtle ground interaction halos
-    drawContactDecals(worldId, state, vp, time, nearestInteractable) {
+    // Draw soft contact shadows, interaction ground halos & click-to-move floor ripple
+    drawContactDecals(worldId, state, vp, time, nearestInteractable, clickRipple) {
       const gl = this.renderer.gl;
       const r = this.renderer;
       gl.enable(gl.BLEND);
@@ -5005,6 +5180,13 @@ try {
                 : it.type.includes('violet') ? [0.78, 0.60, 1.0]
                 : [0.95, 0.96, 1.0];
         r.drawDecal(vp, it.x, it.y, it.z, it.radius * 0.92, c[0], c[1], c[2], 0.62, 1, time);
+      }
+
+      if (clickRipple && clickRipple.active) {
+        const u = ECHO.Math.clamp(clickRipple.age / 0.65, 0, 1);
+        const rad = 0.28 + ECHO.Math.easeOutCubic(u) * 1.15;
+        const alpha = (1 - u) * 0.68;
+        r.drawDecal(vp, clickRipple.x, clickRipple.y + 0.02, clickRipple.z, rad, 0.98, 0.94, 0.84, alpha, 1, time);
       }
 
       gl.depthMask(true);
@@ -5071,7 +5253,7 @@ try {
     }
 
     // Complete main frame render pass!
-    renderFrame(state, camera, nearestInteractable, transitionState) {
+    renderFrame(state, camera, nearestInteractable, transitionState, clickRipple) {
       const r = this.renderer;
       if (r.contextLost || !r.sceneFBO) return;
       const gl = r.gl;
@@ -5127,8 +5309,8 @@ try {
       r.bindWorldUniforms(wCfg, vp, lightVP, camPos, time, playerPos, playerScreen, r.qualityTier >= 1);
       this.drawWorldGeometry(worldId, state, false, time, nearestInteractable, true);
 
-      // Contact Shadows & Interaction Ground Halos
-      this.drawContactDecals(worldId, state, vp, time, nearestInteractable);
+      // Contact Shadows, Interaction Ground Halos & Click Ripple
+      this.drawContactDecals(worldId, state, vp, time, nearestInteractable, clickRipple);
 
       // Verdant Procedural Reflective Water
       if (wCfg.waterLevel !== null) {
@@ -6005,9 +6187,12 @@ try {
       );
 
       this.nearestInteractable = null;
-      this.worldBanner = { text: '', alpha: 0, timer: 0 };
+      this.worldBanner = { text: '', subtext: '', alpha: 0, timer: 0 };
       this.hintAlpha = 0;
       this.activeHintText = '';
+      this.guideEnabled = true;
+      this.feedbackToast = { text: '', timer: 0 };
+      this.clickRipple = { x: 0, y: 0, z: 0, age: 0, active: false };
       this.endingTitleAlpha = 0;
       this.endingSubAlpha = 0;
       this.endingBtnShown = false;
@@ -6070,6 +6255,7 @@ try {
       this.elBtnContinue = document.getElementById('btn-continue');
       this.elBtnReset = document.getElementById('btn-reset');
       this.elBtnSoundTitle = document.getElementById('btn-sound-title');
+      this.elBtnGuideHud = document.getElementById('btn-guide-hud');
       this.elBtnSoundHud = document.getElementById('btn-sound-hud');
       this.elBtnCheckpoint = document.getElementById('btn-checkpoint');
       this.elBtnMenu = document.getElementById('btn-menu');
@@ -6097,6 +6283,12 @@ try {
       };
       this.elBtnSoundTitle.addEventListener('click', toggleSound);
       this.elBtnSoundHud.addEventListener('click', toggleSound);
+      if (this.elBtnGuideHud) {
+        this.elBtnGuideHud.addEventListener('click', () => {
+          this.guideEnabled = !this.guideEnabled;
+          this._syncGuideLabel();
+        });
+      }
 
       this.elBtnCheckpoint.addEventListener('click', () => {
         if (this.camera.transition.active) return;
@@ -6123,9 +6315,13 @@ try {
     }
 
     _syncSoundLabels(on) {
-      const txt = on ? 'SOUND  ON' : 'SOUND  OFF';
+      const txt = on ? '声音  开' : '声音  关';
       if (this.elBtnSoundTitle) this.elBtnSoundTitle.textContent = txt;
-      if (this.elBtnSoundHud) this.elBtnSoundHud.textContent = on ? 'SOUND ON' : 'SOUND OFF';
+      if (this.elBtnSoundHud) this.elBtnSoundHud.textContent = on ? '声音 开' : '声音 关';
+    }
+
+    _syncGuideLabel() {
+      if (this.elBtnGuideHud) this.elBtnGuideHud.textContent = this.guideEnabled ? '指引 开' : '指引 关';
     }
 
     _refreshTitleButtons() {
@@ -6133,12 +6329,16 @@ try {
       if (this.elBtnContinue) this.elBtnContinue.style.display = hasSave ? 'inline-block' : 'none';
       if (this.elBtnReset) this.elBtnReset.style.display = hasSave ? 'inline-block' : 'none';
       this._syncSoundLabels(this.audio.enabled);
+      this._syncGuideLabel();
+    }
+
+    _isTouchLayout() {
+      return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 920;
     }
 
     _updateMobileVisibility() {
       if (!this.elMobile) return;
-      const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 920;
-      const show = this.mode === 'playing' && !this.state.flags.endingTriggered && isTouch;
+      const show = this.mode === 'playing' && !this.state.flags.endingTriggered && this._isTouchLayout();
       this.elMobile.classList.toggle('visible', show);
     }
 
@@ -6147,6 +6347,8 @@ try {
       this.state.reset();
       this.scene.particles.clearAll();
       this.input.clearAll();
+      this.feedbackToast.timer = 0;
+      this.clickRipple.active = false;
       this.endingTitleAlpha = 0;
       this.endingSubAlpha = 0;
       this.endingBtnShown = false;
@@ -6155,8 +6357,10 @@ try {
       this.elTopBar.classList.add('visible');
       this.mode = 'playing';
       this._updateMobileVisibility();
+      this._syncGuideLabel();
       this.audio.setWorldAmbience(this.state.currentWorldId);
-      this.showWorldBanner('AMBER');
+      const w0 = ECHO.WORLDS.amber;
+      this.showWorldBanner(w0.title, w0.titleZh);
       this.state.saveCheckpoint();
       this.state.autoSave();
     }
@@ -6166,19 +6370,28 @@ try {
       if (!loaded) { this.startNewGame(); return; }
       this.scene.particles.clearAll();
       this.input.clearAll();
+      this.feedbackToast.timer = 0;
+      this.clickRipple.active = false;
       this.camera.snapToPlayer(this.state);
       this.elEnding.classList.remove('visible');
       this.elTitle.classList.remove('visible');
       this.elTopBar.classList.add('visible');
       this.mode = 'playing';
       this._updateMobileVisibility();
+      this._syncGuideLabel();
       this.audio.setWorldAmbience(this.state.currentWorldId);
     }
 
-    showWorldBanner(title) {
+    showWorldBanner(title, subtext) {
       this.worldBanner.text = title;
+      this.worldBanner.subtext = subtext || '';
       this.worldBanner.timer = 3.2;
       this.worldBanner.alpha = 0;
+    }
+
+    showFeedbackToast(msg, dur) {
+      this.feedbackToast.text = msg;
+      this.feedbackToast.timer = dur || 3.4;
     }
 
     _bindStateEvents() {
@@ -6221,22 +6434,47 @@ try {
           this.camera.addShake(0.45);
           this.camera.focusBriefly(0, 5.0, -18.5, 2.8, 6.0);
           this.scene.particles.burst(0, 4.8, -19.2, 60, [0.88, 0.78, 1.0], 6.0, 0.26, 2.0, 4.2);
-        } else if (type === 'reject' || type === 'depth_resonator_incomplete') {
+        } else if (type === 'reject') {
           this.audio.playReject();
           this.camera.addShake(0.14);
+          const msgMap = {
+            wrong_orb_amber: '此基座需嵌入「琥珀核心」（供能之力）',
+            wrong_orb_verdant: '此花萼需嵌入「翡翠核心」（生长之力）',
+            wrong_orb_violet: '此星仪需嵌入「紫色核心」（重力之力）',
+            already_inside: '空间法则所限：无法进入当前所在的同一重世界',
+            self_nesting: '空间法则所限：核心不可携入其自身所在的世界',
+            cyclic_nesting: '空间法则所限：嵌套结构不可形成循环闭环',
+            cyclic_placement: '空间法则所限：世界不可被置入其自身的下层',
+            occupied: '此处基座已放置了一枚世界核心',
+            locked: '古代机关尚未解锁，须先点亮前置通道'
+          };
+          this.showFeedbackToast(msgMap[data.reason] || '此处的古老机关尚未唤醒');
+        } else if (type === 'depth_resonator_incomplete') {
+          this.audio.playReject();
+          this.camera.addShake(0.14);
+          if (!data.sealsOk) {
+            this.showFeedbackToast('守卫双翼尚在运转：请先前往西、东浮岛解除两侧封印');
+          } else {
+            const lit = (data.ringAmber ? 1 : 0) + (data.ringVerdant ? 1 : 0) + (data.ringViolet ? 1 : 0);
+            this.showFeedbackToast(`嵌套深度不足（已共鸣 ${lit}/3 环）：须自「苍白起源 → 琥珀 → 翡翠 → 紫色虚空」三层潜入`);
+          }
         } else if (type === 'pale_sanctum_entered') {
-          this.showWorldBanner('PALE');
+          const wp = ECHO.WORLDS.pale;
+          this.showWorldBanner(wp.title, wp.titleZh);
           this.camera.focusBriefly(0, 7.5, -10.0, 2.2, 7.0);
         } else if (type === 'ending_started') {
           this.input.clearAll();
+          this.feedbackToast.timer = 0;
           this.audio.playGuardianAwaken();
           this.elTopBar.classList.remove('visible');
           this._updateMobileVisibility();
           this.scene.particles.burst(0, 8.0, -10.0, 75, [1.0, 0.94, 0.78], 7.0, 0.28, 2.6, 3.5);
         } else if (type === 'world_changed') {
           this.scene.particles.clearAll();
+          this.clickRipple.active = false;
           if (data.firstVisit && data.world !== 'pale') {
-            this.showWorldBanner(ECHO.WORLDS[data.world].title);
+            const wObj = ECHO.WORLDS[data.world];
+            this.showWorldBanner(wObj.title, wObj.titleZh);
           }
           // Mark source world preview dirty so its new state is visible inside the orb!
           if (data.fromWorld && this.renderer.orbPreviews[data.fromWorld]) {
@@ -6333,6 +6571,7 @@ try {
       if (this.state.sampleWalkable(this.state.currentWorldId, hit.x, hit.z, this.state.player.y)) {
         this.input.clickPath = this.state.findPath(this.state.player.x, this.state.player.z, hit.x, hit.z);
         this.input.pendingInteractId = null;
+        this.clickRipple = { x: hit.x, y: this.state.player.y, z: hit.z, age: 0, active: true };
       }
     }
 
@@ -6421,20 +6660,37 @@ try {
         this.worldBanner.alpha = 0;
       }
 
-      // One-time contextual minimal control hint (vanishes forever once performed!)
+      // Update click ripple & feedback toast timers
+      if (this.clickRipple.active) {
+        this.clickRipple.age += dt;
+        if (this.clickRipple.age >= 0.65) this.clickRipple.active = false;
+      }
+      if (this.feedbackToast.timer > 0) {
+        this.feedbackToast.timer = Math.max(0, this.feedbackToast.timer - dt);
+      }
+
+      // Contextual Chinese guidance & immediate action cues (toggleable via 指引 开/关)
       let wantHint = '';
       if (this.mode === 'playing' && !this.state.flags.endingTriggered && !this.camera.transition.active) {
-        if (!this.state.hintsDone.move && this.state.elapsedTime > 1.2) {
-          wantHint = 'WASD  ·  CLICK';
+        if (this.feedbackToast.timer > 0 && this.feedbackToast.text) {
+          wantHint = this.feedbackToast.text;
+        } else if (this.guideEnabled) {
+          if (this.nearestInteractable) {
+            wantHint = this.getContextualActionPrompt(this.nearestInteractable);
+          } else {
+            wantHint = this.getStageGuidance();
+          }
+        } else if (!this.state.hintsDone.move && this.state.elapsedTime > 1.2) {
+          wantHint = this._isTouchLayout() ? '左下摇杆移动 · 轻触右侧光环交互' : 'WASD / 方向键 或 鼠标点击移动';
         } else if (!this.state.hintsDone.interact && this.nearestInteractable) {
-          wantHint = 'SPACE  ·  E';
+          wantHint = this._isTouchLayout() ? '轻触右侧光环交互' : '按 空格 / E 交互';
         }
       }
       if (wantHint) {
         this.activeHintText = wantHint;
-        this.hintAlpha = Math.min(1, this.hintAlpha + dt * 2.4);
+        this.hintAlpha = Math.min(1, this.hintAlpha + dt * 3.0);
       } else {
-        this.hintAlpha = Math.max(0, this.hintAlpha - dt * 3.0);
+        this.hintAlpha = Math.max(0, this.hintAlpha - dt * 3.2);
       }
 
       // Ending typography choreography (wordless cosmic reveal -> ECHO -> quote)
@@ -6449,7 +6705,161 @@ try {
       }
     }
 
-    // Minimalist Canvas2D Overlay (pure poetic geometry: nested depth rings, first-visit world name, one-time hint, ending quote)
+    getContextualActionPrompt(nearest) {
+      if (!nearest || !nearest.action) return '';
+      const act = nearest.action;
+      const prefix = this._isTouchLayout() ? '轻触光环 · ' : '按 空格 / E · ';
+      if (act.kind === 'exit_world') {
+        const parentId = this.state.stack.length > 1 ? this.state.stack[this.state.stack.length - 2].world : 'pale';
+        const pZh = ECHO.WORLDS[parentId] ? ECHO.WORLDS[parentId].titleZh : '外层世界';
+        return `${prefix}沿光柱返回外层世界「${pZh}」`;
+      }
+      if (act.kind === 'activate_switch') {
+        return `${prefix}共鸣激活古代机关`;
+      }
+      if (act.kind === 'pickup_orb') {
+        const om = ECHO.ORB_META[act.orbId];
+        return om ? `${prefix}拾取「${om.nameZh}」（${om.powerZh}之力）` : `${prefix}拾取世界核心`;
+      }
+      if (act.kind === 'place_orb') {
+        const om = ECHO.ORB_META[act.orbId];
+        return om ? `${prefix}置入「${om.nameZh}」激活基座` : `${prefix}置入世界核心`;
+      }
+      if (act.kind === 'dive_world') {
+        const tw = ECHO.WORLDS[act.targetWorld];
+        const carried = this.state.player.carriedOrb ? ECHO.ORB_META[this.state.player.carriedOrb] : null;
+        if (carried && tw) return `${prefix}携「${carried.nameZh}」潜入「${tw.titleZh}」`;
+        return tw ? `${prefix}踏入共鸣环，潜入「${tw.titleZh}」` : `${prefix}潜入世界核心`;
+      }
+      if (act.kind === 'depth_resonator') {
+        return act.ready
+          ? `${prefix}激活三重嵌套共鸣仪，唤醒守卫`
+          : '三重嵌套共鸣仪：需以「苍白 → 琥珀 → 翡翠 → 紫色虚空」三层潜入点亮全部光环';
+      }
+      if (act.kind === 'locked_hint') {
+        return '封印尚未解除，暂无法开启';
+      }
+      if (act.kind === 'reject') {
+        if (act.reason === 'wrong_orb_amber') return '此处需嵌入「琥珀核心」（供能）';
+        if (act.reason === 'wrong_orb_verdant') return '此处需嵌入「翡翠核心」（生长）';
+        if (act.reason === 'wrong_orb_violet') return '此处需嵌入「紫色核心」（重力）';
+        return '空间法则所限，无法在此放置当前核心';
+      }
+      return '';
+    }
+
+    getStageGuidance() {
+      const s = this.state;
+      const f = s.flags;
+      const w = s.currentWorldId;
+      const carried = s.player.carriedOrb;
+      const moveHint = (!s.hintsDone.move && !this._isTouchLayout()) ? 'WASD / 方向键 或 点击地面移动 · ' : '';
+
+      // 阶段一：琥珀荒原苏醒
+      if (!f.amberWakePlate) {
+        return `${moveHint}前往平台边缘激活能量晶碑，唤醒通往光柱的机械桥梁`;
+      }
+      if (w === 'amber' && !f.verdantDiscovered && !s.visitedWorlds.pale) {
+        return '沿着亮起的桥梁踏入中央广场，从白色上升光柱离开琥珀荒原';
+      }
+
+      // 阶段二：苍白门庭发现翡翠核心
+      if (!f.verdantDiscovered) {
+        if (w === 'pale') {
+          if (carried === 'amber') return '将「琥珀核心」置入东侧凹槽延展桥梁，前往东侧石台取回「翡翠核心」';
+          if (s.pedestalHas('pale_alcove_socket', 'amber')) return '跨过金色长桥，取回尽头石台上的「翡翠核心」';
+          return '拾取光环中的「琥珀核心」，用它为东侧的八角供能座充能';
+        }
+      }
+
+      // 阶段三 & 四：翡翠生境水闸与第一守护者（环形巨构）
+      if (!f.g1Awakened) {
+        if (w === 'pale') {
+          if (carried === 'verdant') return '将「翡翠核心」放入右侧空潜入环，再带上「琥珀核心」进入翡翠生境';
+          if (carried === 'amber') return '站在「翡翠核心」前方的发光潜入垫上，携「琥珀核心」潜入翡翠生境';
+          return '将「翡翠核心」放入潜入环并携带「琥珀核心」，即可把供能之力带入翡翠生境';
+        }
+        if (w === 'verdant') {
+          if (!f.verdantSluiceLatched) {
+            if (s.pedestalHas('verdant_sluice_socket', 'amber')) return '跨过升起的水闸石桥，在北岸激活绿色晶碑以永久锁定道路';
+            if (carried === 'amber') return '用「琥珀核心」为西侧八角供能座充能，升起通往北岸的石桥';
+          }
+          if (!f.g1RelayNorth) {
+            return '沿着东侧水道前往环形巨构：待机械臂旋至脚下时踏上，乘至北岛点亮中继台';
+          }
+          return '乘机械臂登上环形巨构中央神坛，将「琥珀核心」放入心核完成最终充能';
+        }
+      }
+
+      // 阶段四后段：取出紫色核心并带回苍白门庭
+      if (!s.orbs.violet || (s.orbs.violet.world === 'verdant' && s.orbs.violet.pedestalId === 'verdant_violet_vault')) {
+        if (w === 'verdant') return '环形守护者已苏醒：跨过稳固的东侧神桥，前往东岛取出「紫色核心」';
+      }
+
+      // 阶段五：跨世界持久化机关（琥珀荒原藤桥、沉没阶梯与重力旋转引水渠）
+      if (!f.amberAqueductAligned) {
+        if (w === 'pale') {
+          if (!f.amberStairLatched) {
+            return '携「翡翠核心」重返「琥珀荒原」，在中央广场以生长之力跨越东侧峡谷';
+          }
+          return '再携「紫色核心」回到「琥珀荒原」，利用已保存的石阶去旋转北方引水渠';
+        }
+        if (w === 'amber') {
+          if (!f.amberStairLatched) {
+            if (s.pedestalHas('amber_vine_cradle', 'verdant')) return '沿藤桥前往对岸中台，激活晶碑永久升起并锁定沉没石阶';
+            if (carried === 'verdant') return '将「翡翠核心」放入广场东侧花萼，催生跨越峡谷的藤蔓桥梁';
+            return '先用「翡翠核心」搭起藤桥，再锁定一旁的沉没石阶';
+          }
+          if (carried === 'violet') return '沿沉没石阶踏上中台，将「紫色核心」放入重力星仪旋转北方引水渠';
+          return '请带回「紫色核心」至中台星仪处，旋转断裂的引水渠以连通高处圣坛';
+        }
+      }
+
+      // 阶段六：紫色虚空双封印与第二守护者（三层世界嵌套）
+      if (!f.g2Awakened) {
+        if (w === 'violet') {
+          if (!f.g2SealWest && !f.g2SealEast) return '分别用「琥珀核心」与「翡翠核心」打通西、东两侧桥梁，解除浮岛上的双翼封印';
+          if (!f.g2SealWest) return '携「琥珀核心」连通西侧浮桥，解除西翼金色封印';
+          if (!f.g2SealEast) return '携「翡翠核心」生长东侧藤桥，解除东翼翠绿封印';
+          const st = s.getDepthResonatorStatus();
+          if (st.ready) return '三重嵌套共鸣环已齐明！前往北方大祭坛中心唤醒多面体守卫';
+          return '双翼封印已解：先退回「苍白起源」，按「苍白 → 琥珀 → 翡翠 → 紫色虚空」三层潜入以点亮三重共鸣环';
+        }
+        if (f.g2SealWest && f.g2SealEast) {
+          if (w === 'pale') {
+            if (!s.pedestalHas('amber_dive', 'verdant')) {
+              return '构建三层嵌套：携「翡翠核心」入琥珀荒原并置于高处潜入环（此时须先把紫色核心留在外层）';
+            }
+            return '琥珀内已有翡翠：此刻携「紫色核心」依次潜入「琥珀 → 翡翠」，再放入紫色潜入环进入第三层';
+          }
+          if (w === 'amber') {
+            if (!s.pedestalHas('amber_dive', 'verdant') && carried === 'verdant') return '穿过已对齐的北方引水渠前往高处圣坛，将「翡翠核心」置入潜入环';
+            if (s.pedestalHas('amber_dive', 'verdant')) return '前往北方高处圣坛，从翡翠潜入垫进入第二层世界';
+          }
+          if (w === 'verdant') {
+            if (carried === 'violet') return '前往北岸台地的潜入环置入「紫色核心」，并踏入第三层「紫色虚空」';
+            if (s.pedestalHas('verdant_dive', 'violet')) return '踏上北岸紫色潜入垫，进入第三层「紫色虚空」激活共鸣仪';
+          }
+        }
+        return '将「紫色核心」置入「苍白起源」的潜入环，分别携琥珀、翡翠潜入并解除两侧封印';
+      }
+
+      // 阶段七：苍白起源圣殿最终综合
+      if (!f.endingTriggered) {
+        if (w !== 'pale') return '起源之门已经开启！带回所有世界核心，逐层返回「苍白起源」';
+        if (!f.paleWestLocked || !f.paleEastLocked) {
+          if (!f.paleSanctumEntered) return '带着三枚核心穿过敞开的起源之门，沿长阶登上中央圣殿';
+          if (!f.paleWestStairAligned) return '在圣殿西侧放入「紫色核心」，以重力旋转断阶至正确朝向';
+          if (!f.paleWestLocked) return '登上已对齐的西侧高塔，放入「琥珀核心」接通左侧光束';
+          if (!s.pedestalHas('pale_east_verdant', 'verdant')) return '在圣殿东侧放入「翡翠核心」，生长晶体藤桥连通东翼高塔';
+          return '跨过东侧晶体藤桥，放入「琥珀核心」接通右侧光束';
+        }
+        return '双翼光束已汇聚：将琥珀、翡翠、紫色三枚核心分别归位中央三元祭坛';
+      }
+      return '';
+    }
+
+    // Minimalist Canvas2D Overlay (pure poetic geometry: nested depth rings, bilingual world banner, Chinese guidance, ending quote)
     renderOverlay2D() {
       const ctx = this.ctx2d;
       const w = this.overlay.width;
@@ -6464,71 +6874,107 @@ try {
       const ch = h / dpr;
 
       const isPaleBright = this.state.currentWorldId === 'pale' && !this.state.flags.endingTriggered;
-      const ink = isPaleBright ? 'rgba(34, 40, 48,' : 'rgba(246, 242, 232,';
+      if (this.elTopBar) this.elTopBar.classList.toggle('pale-ink', isPaleBright);
+      const ink = isPaleBright ? 'rgba(30, 36, 46,' : 'rgba(248, 244, 236,';
+      const shadowCol = isPaleBright ? 'rgba(255, 255, 255, 0.55)' : 'rgba(10, 12, 18, 0.65)';
+      const isCompact = cw <= 920;
 
-      // 1. Minimalist Geometric Nesting-Depth Signifier (bottom-left on desktop; top-left on mobile so joystick stays clear!)
+      // 1. Minimalist Geometric Nesting-Depth Signifier + Subtle Chinese Status Label
       if (!this.state.flags.endingTriggered) {
         const chain = this.state.getWorldChain();
-        const isCompact = cw <= 920;
-        const cx = isCompact ? 34 : 36;
-        const cy = isCompact ? 32 : ch - 36;
+        const cx = isCompact ? 32 : 38;
+        const cy = isCompact ? 32 : ch - 40;
         const colMap = {
-          pale:    isPaleBright ? 'rgba(60, 68, 78, 0.55)' : 'rgba(232, 236, 242, 0.55)',
-          amber:   'rgba(245, 178, 78, 0.85)',
-          verdant: 'rgba(84, 224, 166, 0.85)',
-          violet:  'rgba(186, 146, 252, 0.88)'
+          pale:    isPaleBright ? 'rgba(54, 62, 74, 0.65)' : 'rgba(232, 236, 242, 0.65)',
+          amber:   'rgba(245, 178, 78, 0.90)',
+          verdant: 'rgba(84, 224, 166, 0.90)',
+          violet:  'rgba(186, 146, 252, 0.92)'
         };
         for (let i = 0; i < chain.length; i++) {
-          const rad = 18 - i * 4.4;
+          const rad = (isCompact ? 15 : 18) - i * 4.0;
           ctx.beginPath();
           ctx.arc(cx, cy, Math.max(3, rad), 0, Math.PI * 2);
           ctx.strokeStyle = colMap[chain[i]] || 'rgba(255,255,255,0.6)';
-          ctx.lineWidth = i === chain.length - 1 ? 1.8 : 1.15;
+          ctx.lineWidth = i === chain.length - 1 ? 1.9 : 1.15;
           ctx.stroke();
         }
-        // Tiny solid center dot if carrying an orb!
         if (this.state.player.carriedOrb) {
           ctx.beginPath();
-          ctx.arc(cx, cy, 2.4, 0, Math.PI * 2);
+          ctx.arc(cx, cy, 2.6, 0, Math.PI * 2);
           ctx.fillStyle = colMap[this.state.player.carriedOrb];
           ctx.fill();
         }
+
+        if (this.guideEnabled) {
+          ctx.save();
+          ctx.shadowColor = shadowCol;
+          ctx.shadowBlur = 8;
+          ctx.textAlign = 'left';
+          const wCfg = ECHO.WORLDS[this.state.currentWorldId];
+          const carriedMeta = this.state.player.carriedOrb ? ECHO.ORB_META[this.state.player.carriedOrb] : null;
+          ctx.font = (isCompact ? '400 11px' : '400 12px') + ' "Inter", "PingFang SC", "Noto Sans SC", sans-serif';
+          ctx.fillStyle = ink + '0.74)';
+          const line1 = `${wCfg.titleZh} · 第 ${this.state.nestingDepth} 层`;
+          ctx.fillText(line1, cx + (isCompact ? 24 : 28), carriedMeta ? cy - 4 : cy + 4);
+          if (carriedMeta) {
+            ctx.font = (isCompact ? '400 10px' : '400 11px') + ' "Inter", "PingFang SC", "Noto Sans SC", sans-serif';
+            ctx.fillStyle = ink + '0.58)';
+            ctx.fillText(`背负：${carriedMeta.nameZh}（${carriedMeta.powerZh}）`, cx + (isCompact ? 24 : 28), cy + 12);
+          }
+          ctx.restore();
+        }
       }
 
-      // 2. First-Visit World Title Reveal (brief, wide-tracked, disappears forever)
+      // 2. First-Visit Bilingual World Title Reveal
       if (this.worldBanner.alpha > 0.01) {
         ctx.save();
-        ctx.font = '300 22px "Cinzel", "Optima", "Georgia", serif';
+        ctx.shadowColor = shadowCol;
+        ctx.shadowBlur = 14;
         ctx.textAlign = 'center';
-        ctx.fillStyle = ink + (this.worldBanner.alpha * 0.88).toFixed(3) + ')';
+        ctx.font = '300 22px "Cinzel", "Noto Serif SC", "Songti SC", serif';
+        ctx.fillStyle = ink + (this.worldBanner.alpha * 0.90).toFixed(3) + ')';
         const spaced = this.worldBanner.text.split('').join('   ');
-        ctx.fillText(spaced, cw * 0.5, ch * 0.16);
+        ctx.fillText(spaced, cw * 0.5, ch * 0.15);
+        if (this.worldBanner.subtext) {
+          ctx.font = '300 13px "Noto Serif SC", "Songti SC", "PingFang SC", serif';
+          ctx.fillStyle = ink + (this.worldBanner.alpha * 0.72).toFixed(3) + ')';
+          const zhSpaced = this.worldBanner.subtext.split('').join('  ');
+          ctx.fillText(zhSpaced, cw * 0.5, ch * 0.15 + 24);
+        }
         ctx.restore();
       }
 
-      // 3. One-Time Minimal Control Cue (disappears permanently once done)
+      // 3. Whisper-Clean Bottom-Center Chinese Exploration / Action Guidance
       if (this.hintAlpha > 0.01 && this.activeHintText) {
         ctx.save();
-        ctx.font = '400 11px "Inter", system-ui, -apple-system, sans-serif';
+        ctx.shadowColor = shadowCol;
+        ctx.shadowBlur = 10;
+        ctx.font = (isCompact ? '400 12px' : '400 13px') + ' "Inter", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillStyle = ink + (this.hintAlpha * 0.62).toFixed(3) + ')';
-        ctx.fillText(this.activeHintText, cw * 0.5, ch - 34);
+        const isAction = !!this.nearestInteractable || this.feedbackToast.timer > 0;
+        const alpha = (isAction ? 0.92 : 0.72) * this.hintAlpha;
+        ctx.fillStyle = ink + alpha.toFixed(3) + ')';
+        const bottomY = isCompact ? ch - 24 : ch - 34;
+        ctx.fillText(this.activeHintText, cw * 0.5, bottomY);
         ctx.restore();
       }
 
-      // 4. Ending Title & Quote ("Every world is a world within.") framed cleanly in serene upper cosmos
+      // 4. Bilingual Ending Title & Quote framed cleanly in serene upper cosmos
       if (this.state.flags.endingTriggered && this.endingTitleAlpha > 0.01) {
         ctx.save();
         ctx.textAlign = 'center';
         ctx.shadowColor = 'rgba(8, 6, 20, 0.72)';
         ctx.shadowBlur = 18;
-        ctx.font = '300 44px "Cinzel", "Optima", "Georgia", serif';
+        ctx.font = '300 44px "Cinzel", "Noto Serif SC", "Songti SC", serif';
         ctx.fillStyle = 'rgba(250, 247, 240, ' + (this.endingTitleAlpha * 0.96).toFixed(3) + ')';
-        ctx.fillText('E   C   H   O', cw * 0.5, ch * 0.165);
+        ctx.fillText('E   C   H   O', cw * 0.5, ch * 0.15);
         if (this.endingSubAlpha > 0.01) {
-          ctx.font = '300 16px "Cinzel", "Optima", "Georgia", serif';
+          ctx.font = '300 16px "Cinzel", "Noto Serif SC", "Songti SC", serif';
           ctx.fillStyle = 'rgba(232, 236, 248, ' + (this.endingSubAlpha * 0.88).toFixed(3) + ')';
-          ctx.fillText('Every world is a world within.', cw * 0.5, ch * 0.235);
+          ctx.fillText('Every world is a world within.', cw * 0.5, ch * 0.215);
+          ctx.font = '300 13px "Noto Serif SC", "Songti SC", "PingFang SC", serif';
+          ctx.fillStyle = 'rgba(224, 228, 242, ' + (this.endingSubAlpha * 0.76).toFixed(3) + ')';
+          ctx.fillText('每一重世界，皆在另一重世界之中。', cw * 0.5, ch * 0.258);
         }
         ctx.restore();
       }
@@ -6580,7 +7026,7 @@ try {
         center: tr.center,
         dir: tr.dir,
         tint: tr.tint
-      });
+      }, this.clickRipple);
       this.renderOverlay2D();
     }
   }
