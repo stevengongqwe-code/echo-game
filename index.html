@@ -2935,22 +2935,54 @@ try {
         assets.guardian2Mid = mb.pack();
       }
 
-      // 16. ORIGINAL ALIEN BIOMECHANICAL CREATURE PARTS (100% sculpted low-poly, NOT capsules!)
+      // 16. HERO CREATURE — "The Porcelain Spirit-Beetle / Celestial Moth-Scarab"
+      // Sculpted with explicit outward-facing winding (NO negative scaling!)
+      const addOrientedQuad = (mb, a, b, c, d, outHint, col, a0, a1, a2, a3, rough, matId) => {
+        const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+        const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+        const nx = uy * vz - uz * vy;
+        const ny = uz * vx - ux * vz;
+        const nz = ux * vy - uy * vx;
+        const dot = nx * outHint[0] + ny * outHint[1] + nz * outHint[2];
+        if (dot >= 0) {
+          mb.addQuad(a, b, c, d, col, a0, a1, a2, a3, rough, matId);
+        } else {
+          mb.addQuad(a, d, c, b, col, a0, a3, a2, a1, rough, matId);
+        }
+      };
+
+      const addOrientedTri = (mb, a, b, c, outHint, col, a0, a1, a2, rough, matId) => {
+        const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+        const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+        const nx = uy * vz - uz * vy;
+        const ny = uz * vx - ux * vz;
+        const nz = ux * vy - uy * vx;
+        const dot = nx * outHint[0] + ny * outHint[1] + nz * outHint[2];
+        if (dot >= 0) {
+          mb.addTri(a, b, c, col, a0, a1, a2, rough, matId);
+        } else {
+          mb.addTri(a, c, b, col, a0, a2, a1, rough, matId);
+        }
+      };
+
+      const pearlIvory = [0.98, 0.96, 0.92];
+      const warmCream = [0.88, 0.83, 0.74];
+      const velvetIndigo = [0.15, 0.17, 0.26];
+      const champGold = [0.96, 0.80, 0.46];
+      const spiritAqua = [0.80, 0.98, 1.0];
+
       {
-        // Main streamlined biomechanical carapace torso
+        // 16a. Sleek Plump Velvet Obsidian-Indigo Core Body + Champagne-Gold Collar & Spirit Heart Gem
         const mb = new MeshBuilder();
-        const shell = [0.88, 0.86, 0.82];     // pale ceramic-chitin
-        const under = [0.22, 0.24, 0.28];     // dark obsidian biomech underbelly
-        const goldRim = [0.88, 0.72, 0.42];
-        // Sculpted tapered beetle/mantis-like segmented body (aligned +Z = forward!)
         const zRings = [
-          { z: -0.58, y: 0.02, rx: 0.14, ry: 0.10 },
-          { z: -0.34, y: 0.14, rx: 0.36, ry: 0.22 },
-          { z: 0.00,  y: 0.18, rx: 0.44, ry: 0.26 },
-          { z: 0.32,  y: 0.12, rx: 0.34, ry: 0.21 },
-          { z: 0.58,  y: 0.04, rx: 0.18, ry: 0.12 }
+          { z: -0.56, y: 0.06, rx: 0.12, ry: 0.09 },
+          { z: -0.36, y: 0.10, rx: 0.27, ry: 0.18 },
+          { z: -0.10, y: 0.13, rx: 0.36, ry: 0.22 },
+          { z:  0.16, y: 0.13, rx: 0.34, ry: 0.21 },
+          { z:  0.38, y: 0.10, rx: 0.24, ry: 0.15 },
+          { z:  0.50, y: 0.08, rx: 0.16, ry: 0.11 }
         ];
-        const segs = 8;
+        const segs = 14;
         const loops = zRings.map((r) => {
           const pts = [];
           for (let i = 0; i < segs; i++) {
@@ -2962,56 +2994,155 @@ try {
         for (let r = 0; r < loops.length - 1; r++) {
           for (let i = 0; i < segs; i++) {
             const ni = (i + 1) % segs;
-            const isTop = Math.sin(((i + 0.5) / segs) * Math.PI * 2) > -0.15;
-            const c = isTop ? shell : under;
-            mb.addQuad(loops[r][i], loops[r][ni], loops[r + 1][ni], loops[r + 1][i], c, 0.96, 0.96, 0.92, 0.92, isTop ? 0.44 : 0.62, isTop ? 5.0 : 1.0);
+            const pA = loops[r][i], pB = loops[r][ni], pC = loops[r + 1][ni], pD = loops[r + 1][i];
+            const mx = (pA[0] + pB[0] + pC[0] + pD[0]) * 0.25;
+            const my = (pA[1] + pB[1] + pC[1] + pD[1]) * 0.25 - 0.12;
+            const mz = (pA[2] + pB[2] + pC[2] + pD[2]) * 0.25;
+            addOrientedQuad(mb, pA, pB, pC, pD, [mx, my, mz * 0.2], velvetIndigo, 0.94, 0.94, 0.90, 0.90, 0.48, 4.0);
           }
         }
-        // Tail & Nose tips
-        const tail = [0, 0.0, -0.74], nose = [0, 0.04, 0.74];
+        const tailTip = [0, 0.07, -0.64], neckTip = [0, 0.08, 0.56];
         for (let i = 0; i < segs; i++) {
           const ni = (i + 1) % segs;
-          mb.addTri(tail, loops[0][ni], loops[0][i], under, 0.75, 0.9, 0.9, 0.5, 1.0);
-          mb.addTri(nose, loops[loops.length - 1][i], loops[loops.length - 1][ni], shell, 1.0, 0.95, 0.95, 0.42, 5.0);
+          addOrientedTri(mb, tailTip, loops[0][i], loops[0][ni], [0, 0, -1], velvetIndigo, 0.88, 0.92, 0.92, 0.48, 4.0);
+          addOrientedTri(mb, neckTip, loops[loops.length - 1][i], loops[loops.length - 1][ni], [0, 0, 1], velvetIndigo, 0.9, 0.9, 0.9, 0.48, 4.0);
         }
-        // Decorative ancient dorsal gold spine seam & bioluminescent dorsal ribs (crisp silhouette in all worlds!)
-        mb.addChamferBox(0, 0.36, -0.02, 0.075, 0.055, 0.36, 0.02, [0.22, 0.24, 0.28], goldRim, 0.30, 1.0, 0, null);
-        for (let r = -1; r <= 1; r++) {
-          mb.addChamferBox(0, 0.39, r * 0.16, 0.14, 0.022, 0.032, 0.008, [0.76, 0.96, 1.0], [0.76, 0.96, 1.0], 0.25, 6.0, 0, null);
-        }
+
+        // Champagne-gold collar & dorsal mantle ring
+        mb.addTorusArc(0, 0.11, 0.36, 0.23, 0.032, 18, 6, 0, Math.PI * 2, Math.PI * 0.5, 0, 0, champGold, 0.28, 1.0);
+        // Smooth glowing cyan-pearl spirit heart gem nestled inside dorsal mantle
+        mb.addSphere(0, 0.28, -0.02, 0.15, 12, 16, spiritAqua, 0.18, 6.0, true);
+        // Subtle champagne-gold tail clasp accent (no oversized glowing ball)
+        mb.addSphere(0, 0.09, -0.62, 0.055, 8, 10, champGold, 0.28, 1.0, true);
         assets.creatureBody = mb.pack();
       }
 
-      {
-        // Sculpted Hinged Back Armor Wing (Left / Right mirrored via scale X)
+      // 16b. Sculpted Double-Sided Porcelain Beetle-Cloak Elytra Wings (both outer & inner read clean porcelain/cream!)
+      const buildElytron = (side) => {
         const mb = new MeshBuilder();
-        const wingCol = [0.92, 0.90, 0.85];
-        const innerCol = [0.26, 0.24, 0.26];
-        // Curved teardrop carapace plate with fine obsidian border rim
-        mb.addChamferBox(0.18, 0.05, -0.05, 0.20, 0.045, 0.36, 0.03, wingCol, innerCol, 0.40, 5.0, -0.14, null);
-        mb.addFacetedSpire(0.24, 0.06, -0.34, 0.14, 0.08, 0.04, 0.18, 5, wingCol, 0.40, 5.0, null);
-        assets.creatureWing = mb.pack();
-      }
+        const uSteps = 8;
+        const vSteps = 6;
+        const thick = 0.042;
+        const outerGrid = [];
+        const innerGrid = [];
 
-      {
-        // Sculpted Slender Articulated Biomechanical Leg Segment (pivot at top [0,0,0], extends -Y to -1.0)
-        const mb = new MeshBuilder();
-        const darkJoint = [0.24, 0.25, 0.30];
-        const ivoryLimb = [0.82, 0.80, 0.76];
-        mb.addSphere(0, 0, 0, 0.09, 5, 6, darkJoint, 0.42, 1.0, false);
-        mb.addPrism(0, -1.0, -0.04, 0, 0.038, 0.072, 5, ivoryLimb, ivoryLimb, 0.48, 5.0, 0.2);
-        mb.addSphere(0, -1.0, 0, 0.05, 4, 5, darkJoint, 0.45, 1.0, false);
-        assets.creatureLegSeg = mb.pack();
-      }
+        for (let i = 0; i <= uSteps; i++) {
+          const u = i / uSteps;
+          const z = 0.18 - u * 0.92; // sleek cloak length from anterior hinge to rounded tail
+          const span = Math.sin(Math.pow(u, 0.62) * Math.PI) * 0.36 + (1 - u) * 0.05;
+          const archZ = Math.sin(u * Math.PI) * 0.11 - u * 0.07;
+          const oRow = [], iRow = [];
+          for (let j = 0; j <= vSteps; j++) {
+            const v = j / vSteps;
+            const xBase = side * (0.012 + v * span);
+            const domeY = archZ + Math.sin(v * Math.PI) * 0.085 * (1 - u * 0.35) - v * v * 0.16;
+            const t = thick * (1 - 0.5 * Math.pow(Math.abs(v - 0.5) * 2, 1.5)) * (1 - u * 0.4);
+            oRow.push([xBase, domeY + t * 0.5, z]);
+            iRow.push([xBase - side * 0.008 * v, domeY - t * 0.6, z]);
+          }
+          outerGrid.push(oRow);
+          innerGrid.push(iRow);
+        }
 
+        for (let i = 0; i < uSteps; i++) {
+          for (let j = 0; j < vSteps; j++) {
+            const oa = outerGrid[i][j], ob = outerGrid[i + 1][j], oc = outerGrid[i + 1][j + 1], od = outerGrid[i][j + 1];
+            addOrientedQuad(mb, oa, ob, oc, od, [side * 0.3, 1.0, 0], pearlIvory, 1.0, 0.98, 0.95, 0.96, 0.34, 5.0);
+
+            const ia = innerGrid[i][j], ib = innerGrid[i + 1][j], ic = innerGrid[i + 1][j + 1], id = innerGrid[i][j + 1];
+            addOrientedQuad(mb, ia, ib, ic, id, [-side * 0.3, -1.0, 0], warmCream, 0.92, 0.90, 0.92, 0.94, 0.42, 5.0);
+          }
+          addOrientedQuad(mb, outerGrid[i][0], outerGrid[i + 1][0], innerGrid[i + 1][0], innerGrid[i][0], [-side, 0.25, 0], champGold, 1.0, 1.0, 0.92, 0.92, 0.28, 1.0);
+          addOrientedQuad(mb, outerGrid[i][vSteps], outerGrid[i + 1][vSteps], innerGrid[i + 1][vSteps], innerGrid[i][vSteps], [side, -0.2, 0], champGold, 0.96, 0.96, 0.88, 0.88, 0.30, 1.0);
+        }
+        return mb.pack();
+      };
+      assets.creatureWingL = buildElytron(-1);
+      assets.creatureWingR = buildElytron(1);
+
+      // 16c. Adorable Porcelain Spirit-Mask Head + Deep Indigo Visor + Expressive Large Pearl-Aqua Eyes + Gold Brow
       {
-        // Head Shield + Glowing Sensory Crest
         const mb = new MeshBuilder();
-        mb.addFacetedSpire(0, 0.02, 0.14, 0.24, 0.16, 0.12, 0.28, 6, [0.90, 0.88, 0.84], 0.42, 5.0, null);
-        // Twin tiny biomechanical antennae
-        mb.addPrism(-0.12, 0.08, 0.34, 0.26, 0.022, 0.01, 4, [0.3, 0.32, 0.36], [0.3, 0.32, 0.36], 0.4, 1.0, 0);
-        mb.addPrism(0.12, 0.08, 0.34, 0.26, 0.022, 0.01, 4, [0.3, 0.32, 0.36], [0.3, 0.32, 0.36], 0.4, 1.0, 0);
+        // Smooth plump porcelain mask dome (generous readable head silhouette)
+        mb.addSphere(0, 0.04, -0.02, 0.30, 12, 16, pearlIvory, 0.34, 5.0, true);
+        // Soft sculpted cheek plates tapering slightly backward
+        mb.addSphere(-0.14, 0.00, -0.06, 0.17, 8, 12, pearlIvory, 0.36, 5.0, true);
+        mb.addSphere(0.14, 0.00, -0.06, 0.17, 8, 12, pearlIvory, 0.36, 5.0, true);
+        // Dark velvet indigo recessed face visor facing +Z
+        mb.addSphere(0, 0.01, 0.10, 0.245, 10, 14, velvetIndigo, 0.44, 4.0, true);
+        // Twin expressive glowing spirit eyes (larger, crisp & soulful!)
+        mb.addSphere(-0.095, 0.035, 0.295, 0.056, 8, 12, spiritAqua, 0.15, 6.0, true);
+        mb.addSphere(0.095, 0.035, 0.295, 0.056, 8, 12, spiritAqua, 0.15, 6.0, true);
+        // Delicate champagne-gold crescent brow diadem above the visor
+        mb.addTorusArc(0, 0.14, 0.09, 0.22, 0.026, 16, 6, 0.18, Math.PI - 0.18, 0.32, 0, 0, champGold, 0.28, 1.0);
         assets.creatureHead = mb.pack();
+      }
+
+      // 16d. Bold Sculpted Porcelain Crescent Spirit-Horns / Swept Ears (clean tapered silhouettes, NO floating balls!)
+      const buildSpiritHorn = (side) => {
+        const mb = new MeshBuilder();
+        const segs = 9;
+        const radial = 8;
+        const rings = [];
+        for (let i = 0; i <= segs; i++) {
+          const t = i / segs;
+          // Iconic curved crescent horn/ear sweeping upward, outward, then gracefully curving inward-back
+          const cx = side * (0.04 + Math.sin(t * Math.PI * 0.85) * 0.22 + t * 0.04);
+          const cy = t * 0.44 - Math.pow(t, 2.2) * 0.06;
+          const cz = t * 0.08 - Math.pow(t, 1.6) * 0.36;
+          const r = 0.068 * (1 - t * 0.72) + 0.008;
+          const loop = [];
+          for (let j = 0; j < radial; j++) {
+            const a = (j / radial) * Math.PI * 2;
+            loop.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.72, cz + Math.sin(a) * r * 0.85]);
+          }
+          rings.push({ loop, cx, cy, cz });
+        }
+        // Gold base collar at horn root
+        mb.addTorusArc(0, 0.01, 0, 0.072, 0.018, 12, 5, 0, Math.PI * 2, 0, 0, 0, champGold, 0.28, 1.0);
+        for (let i = 0; i < segs; i++) {
+          const col = i >= segs - 2 ? champGold : pearlIvory;
+          for (let j = 0; j < radial; j++) {
+            const nj = (j + 1) % radial;
+            const pA = rings[i].loop[j], pB = rings[i + 1].loop[j], pC = rings[i + 1].loop[nj], pD = rings[i].loop[nj];
+            const out = [pA[0] - rings[i].cx, pA[1] - rings[i].cy, pA[2] - rings[i].cz];
+            addOrientedQuad(mb, pA, pB, pC, pD, out, col, 0.98, 0.98, 0.94, 0.94, 0.34, 5.0);
+          }
+        }
+        // Clean tapered tip cap
+        const last = rings[segs];
+        const tipPt = [last.cx + side * 0.01, last.cy + 0.04, last.cz - 0.05];
+        for (let j = 0; j < radial; j++) {
+          const nj = (j + 1) % radial;
+          addOrientedTri(mb, tipPt, last.loop[j], last.loop[nj], [side * 0.3, 0.8, -0.5], champGold, 1.0, 0.95, 0.95, 0.30, 1.0);
+        }
+        return mb.pack();
+      };
+      assets.creatureAntennaL = buildSpiritHorn(-1);
+      assets.creatureAntennaR = buildSpiritHorn(1);
+
+      // 16e. Sculpted Substantial Biomechanical Leg Segment (pivot 0,0,0 -> z=1.0, strong readable thickness!)
+      {
+        const mb = new MeshBuilder();
+        mb.addSphere(0, 0, 0, 0.11, 8, 10, velvetIndigo, 0.38, 4.0, true);
+        mb.addTorusArc(0, 0, 0.08, 0.095, 0.022, 12, 5, 0, Math.PI * 2, Math.PI * 0.5, 0, 0, champGold, 0.28, 1.0);
+        const segs = 8;
+        const rA = 0.088, rB = 0.050;
+        const ringA = [], ringB = [];
+        for (let i = 0; i < segs; i++) {
+          const a = (i / segs) * Math.PI * 2;
+          ringA.push([Math.cos(a) * rA, Math.sin(a) * rA, 0.06]);
+          ringB.push([Math.cos(a) * rB, Math.sin(a) * rB, 0.95]);
+        }
+        for (let i = 0; i < segs; i++) {
+          const ni = (i + 1) % segs;
+          const midA = (i + 0.5) / segs * Math.PI * 2;
+          addOrientedQuad(mb, ringA[i], ringA[ni], ringB[ni], ringB[i], [Math.cos(midA), Math.sin(midA), 0], pearlIvory, 0.96, 0.96, 0.90, 0.90, 0.38, 5.0);
+        }
+        // Sculpted obsidian-gold grounded foot/claw boot
+        mb.addSphere(0, 0, 0.97, 0.064, 7, 8, velvetIndigo, 0.36, 4.0, true);
+        mb.addTorusArc(0, 0, 0.91, 0.058, 0.016, 10, 5, 0, Math.PI * 2, Math.PI * 0.5, 0, 0, champGold, 0.28, 1.0);
+        assets.creatureLegSeg = mb.pack();
       }
 
       {
@@ -4614,11 +4745,11 @@ try {
       const forwardPitch = ECHO.Math.clamp(this.smoothSpeed * 0.032, 0, 0.18);
       this.bodyTiltX += (forwardPitch - this.bodyTiltX) * Math.min(1, dt * 8);
 
-      // Smooth carried orb inertial hover right over the unfolded back carapace
-      const bob = Math.sin(state.elapsedTime * 3.1) * 0.055;
-      const backDist = -0.14;
+      // Smooth carried orb inertial hover nestled gracefully between unfolded porcelain wings
+      const bob = Math.sin(state.elapsedTime * 3.0) * 0.045;
+      const backDist = -0.06;
       const targetOrbX = p.x + Math.sin(p.facing) * backDist;
-      const targetOrbY = p.y + 1.38 + bob;
+      const targetOrbY = p.y + 1.15 + bob;
       const targetOrbZ = p.z + Math.cos(p.facing) * backDist;
 
       if (!this.orbLagInit || !p.carriedOrb) {
@@ -4634,13 +4765,23 @@ try {
       }
     }
 
-    // Draw articulated alien biomechanical creature (torso, head, sensory crystal, 2 wings, 4 two-segment legs!)
+    drawBoneSegment(renderer, mesh, ax, ay, az, bx, by, bz, radiusScale, isShadowPass) {
+      const dx = bx - ax, dy = by - ay, dz = bz - az;
+      const len = Math.hypot(dx, dy, dz);
+      if (len < 1e-4) return;
+      const h = Math.hypot(dx, dz);
+      const ry = Math.atan2(dx, dz);
+      const rx = Math.atan2(-dy, h);
+      renderer.drawMesh(mesh, ax, ay, az, rx, ry, 0, radiusScale, radiusScale, len, null, 0, isShadowPass, false);
+    }
+
+    // Draw articulated "Porcelain Spirit-Beetle / Celestial Moth-Scarab" with exact bone-connected joints!
     render(renderer, state, isShadowPass) {
       const p = state.player;
       const time = state.elapsedTime;
       const strideAmp = ECHO.Math.clamp(this.smoothSpeed / 5.5, 0, 1);
-      const bob = Math.abs(Math.sin(this.gaitPhase)) * 0.065 * strideAmp + Math.sin(time * 2.4) * 0.02;
-      const bodyY = p.y + 0.62 + bob;
+      const bob = Math.abs(Math.sin(this.gaitPhase)) * 0.045 * strideAmp + Math.sin(time * 2.2) * 0.015;
+      const bodyY = p.y + 0.46 + bob;
       const yaw = p.facing;
       const cosY = Math.cos(yaw), sinY = Math.sin(yaw);
 
@@ -4650,55 +4791,78 @@ try {
         p.z - lx * sinY + lz * cosY
       ];
 
-      // 1. Streamlined Armored Torso
-      renderer.drawMesh(renderer.meshes.creatureBody, p.x, bodyY, p.z, this.bodyTiltX, yaw, 0, 0.92, 0.92, 0.92, null, 0, isShadowPass, false);
+      // 1. Sculpted Velvet Obsidian-Indigo Body + Champagne-Gold Filigree + Spirit Heart
+      renderer.drawMesh(renderer.meshes.creatureBody, p.x, bodyY, p.z, this.bodyTiltX, yaw, 0, 0.96, 0.96, 0.96, null, isShadowPass ? 0 : 0.08, isShadowPass, false);
 
-      // 2. Sculpted Head Shield + Glowing Sensory Organ
-      const headPos = toWorld(0, 0.14, 0.56);
-      renderer.drawMesh(renderer.meshes.creatureHead, headPos[0], headPos[1], headPos[2], 0.08, yaw + this.headYaw, 0, 0.88, 0.88, 0.88, null, 0, isShadowPass, false);
-      if (!isShadowPass) {
-        const sensPos = toWorld(0, 0.24, 0.72);
-        const sensCol = p.carriedOrb ? ECHO.ORB_META[p.carriedOrb].emissive : [0.76, 0.96, 1.0];
-        renderer.drawMesh(renderer.meshes.crystal, sensPos[0], sensPos[1], sensPos[2], 0, time * 1.4, 0, 0.11, 0.11, 0.11, sensCol, 0.65 + this.sensoryGlow * 1.1, false, false);
+      // 2. Charming Porcelain Crescent Spirit-Mask Head + Paired Glowing Eyes + Sweeping Spirit Horns
+      const headPos = toWorld(0, 0.14, 0.44);
+      const headPitch = 0.04 + Math.sin(time * 2.2) * 0.025;
+      const headFinalYaw = yaw + this.headYaw;
+      const headRoll = this.headYaw * 0.24;
+      const emLift = isShadowPass ? 0 : 0.10;
+      renderer.drawMesh(renderer.meshes.creatureHead, headPos[0], headPos[1], headPos[2], headPitch, headFinalYaw, headRoll, 0.94, 0.94, 0.94, null, emLift, isShadowPass, false);
+
+      if (renderer.meshes.creatureAntennaL && renderer.meshes.creatureAntennaR) {
+        const hc = Math.cos(headFinalYaw), hs = Math.sin(headFinalYaw);
+        const antBase = (lx, ly, lz) => [
+          headPos[0] + lx * hc + lz * hs,
+          headPos[1] + ly,
+          headPos[2] - lx * hs + lz * hc
+        ];
+        const antSweep = -0.06 - strideAmp * 0.18 + Math.sin(time * 2.5) * 0.04;
+        const antL = antBase(-0.11, 0.18, 0.02);
+        const antR = antBase(0.11, 0.18, 0.02);
+        renderer.drawMesh(renderer.meshes.creatureAntennaL, antL[0], antL[1], antL[2], antSweep, headFinalYaw, 0.08, 0.95, 0.95, 0.95, null, emLift, isShadowPass, false);
+        renderer.drawMesh(renderer.meshes.creatureAntennaR, antR[0], antR[1], antR[2], antSweep, headFinalYaw, -0.08, 0.95, 0.95, 0.95, null, emLift, isShadowPass, false);
       }
 
-      // 3. Hinged Back Carapace Wings (open gracefully to cradle World Orbs!)
-      const wingAngle = 0.18 + this.wingOpen * 0.82;
-      const leftWingPos = toWorld(-0.14, 0.24, -0.02);
-      const rightWingPos = toWorld(0.14, 0.24, -0.02);
-      renderer.drawMesh(renderer.meshes.creatureWing, leftWingPos[0], leftWingPos[1], leftWingPos[2], 0.05, yaw, -wingAngle, -0.95, 0.95, 0.95, null, 0, isShadowPass, false);
-      renderer.drawMesh(renderer.meshes.creatureWing, rightWingPos[0], rightWingPos[1], rightWingPos[2], 0.05, yaw, wingAngle, 0.95, 0.95, 0.95, null, 0, isShadowPass, false);
+      // 3. Double-Sided Porcelain Beetle-Cloak Wings (part smoothly outward like an open petal cradle when carrying an orb!)
+      const breatheFlutter = Math.sin(time * 2.2) * 0.02 * (1 - this.wingOpen * 0.5);
+      const wingLift = 0.05 + this.wingOpen * 0.24 + breatheFlutter;
+      const wingSpread = 0.02 + this.wingOpen * 0.54;
+      const wingPitch = -this.wingOpen * 0.14;
+      const hingeL = toWorld(-0.02, 0.26, 0.14);
+      const hingeR = toWorld(0.02, 0.26, 0.14);
 
-      // 4. Four Slender Articulated Two-Segment Insectoid Legs (procedural gait!)
+      if (renderer.meshes.creatureWingL && renderer.meshes.creatureWingR) {
+        renderer.drawMesh(renderer.meshes.creatureWingL, hingeL[0], hingeL[1], hingeL[2], wingPitch, yaw + wingSpread, -wingLift, 1.0, 1.0, 1.0, null, emLift, isShadowPass, false);
+        renderer.drawMesh(renderer.meshes.creatureWingR, hingeR[0], hingeR[1], hingeR[2], wingPitch, yaw - wingSpread, wingLift, 1.0, 1.0, 1.0, null, emLift, isShadowPass, false);
+      }
+
+      // Golden hovering energy cradle ring under carried World Orb
+      if (!isShadowPass && p.carriedOrb && renderer.meshes.unitRing) {
+        const orbMeta = ECHO.ORB_META[p.carriedOrb];
+        const rc = orbMeta ? orbMeta.emissive : [0.98, 0.84, 0.50];
+        renderer.drawMesh(renderer.meshes.unitRing, this.orbHoldPos[0], this.orbHoldPos[1] - 0.36, this.orbHoldPos[2], 0.08, time * 1.1, 0, 0.38, 0.7, 0.38, rc, 0.95, false, false);
+      }
+
+      // 4. Exact Bone-Connected Four-Legged Procedural Gait (strong sculpted silhouette!)
       const legSpecs = [
-        { side: -1, hx: -0.32, hz: 0.28, phase: 0 },
-        { side:  1, hx:  0.32, hz: 0.28, phase: Math.PI },
-        { side: -1, hx: -0.30, hz: -0.28, phase: Math.PI },
-        { side:  1, hx:  0.30, hz: -0.28, phase: 0 }
+        { side: -1, hx: -0.22, hz:  0.22, fx: -0.50, fz:  0.42, phase: 0 },
+        { side:  1, hx:  0.22, hz:  0.22, fx:  0.50, fz:  0.42, phase: Math.PI },
+        { side: -1, hx: -0.22, hz: -0.22, fx: -0.52, fz: -0.44, phase: Math.PI },
+        { side:  1, hx:  0.22, hz: -0.22, fx:  0.52, fz: -0.44, phase: 0 }
       ];
       for (let i = 0; i < 4; i++) {
         const leg = legSpecs[i];
         const ph = this.gaitPhase + leg.phase;
-        const swing = Math.sin(ph) * 0.34 * strideAmp;
-        const lift = Math.max(0, Math.cos(ph)) * 0.22 * strideAmp;
+        const swingZ = Math.sin(ph) * 0.22 * strideAmp;
+        const lift = Math.max(0, Math.cos(ph)) * 0.16 * strideAmp;
 
         const hip = toWorld(leg.hx, 0.02, leg.hz);
-        // Upper femur angles outward and slightly up
-        const femurPitch = swing * 0.65;
-        const femurRoll = leg.side * (0.68 - lift * 0.45);
-        renderer.drawMesh(renderer.meshes.creatureLegSeg, hip[0], hip[1], hip[2], femurPitch, yaw, femurRoll, 0.48, 0.48, 0.48, null, 0, isShadowPass, false);
+        const footLocal = toWorld(leg.fx, 0, leg.fz + swingZ);
+        const footX = footLocal[0];
+        const footY = p.y + 0.04 + lift;
+        const footZ = footLocal[2];
 
-        // Knee world position (approx endpoint of femur)
-        const kneeLocalX = leg.hx + leg.side * Math.sin(Math.abs(femurRoll)) * 0.46;
-        const kneeLocalY = 0.02 - Math.cos(Math.abs(femurRoll)) * 0.46 + lift * 0.14;
-        const kneeLocalZ = leg.hz + Math.sin(femurPitch) * 0.42;
-        const knee = toWorld(kneeLocalX, kneeLocalY, kneeLocalZ);
+        // Sculpted outward-arched knee right beside hip & foot
+        const kneeOff = toWorld(leg.side * 0.13, 0, 0);
+        const midX = (hip[0] + footX) * 0.5 + (kneeOff[0] - p.x);
+        const midZ = (hip[2] + footZ) * 0.5 + (kneeOff[2] - p.z);
+        const kneeY = hip[1] + 0.05 + lift * 0.18;
 
-        // Lower tibia drops sharply toward ground height!
-        const tibiaRoll = leg.side * (-0.18 + lift * 0.18);
-        const tibiaPitch = -swing * 0.45;
-        const tibiaLen = ECHO.Math.clamp((knee[1] - p.y) / 0.95, 0.28, 0.62);
-        renderer.drawMesh(renderer.meshes.creatureLegSeg, knee[0], knee[1], knee[2], tibiaPitch, yaw, tibiaRoll, 0.42, tibiaLen, 0.42, null, 0, isShadowPass, false);
+        this.drawBoneSegment(renderer, renderer.meshes.creatureLegSeg, hip[0], hip[1], hip[2], midX, kneeY, midZ, 0.72, isShadowPass);
+        this.drawBoneSegment(renderer, renderer.meshes.creatureLegSeg, midX, kneeY, midZ, footX, footY, footZ, 0.58, isShadowPass);
       }
     }
   }
